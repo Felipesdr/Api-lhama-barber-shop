@@ -28,7 +28,8 @@ CREATE TABLE IF NOT EXISTS service (
     name VARCHAR(255) NOT NULL,
     description VARCHAR(1000),
     duration INT,
-    price DECIMAL(10, 2)
+    price DECIMAL(10, 2),
+    active BOOLEAN
 );
 
 CREATE TABLE IF NOT EXISTS available_time (

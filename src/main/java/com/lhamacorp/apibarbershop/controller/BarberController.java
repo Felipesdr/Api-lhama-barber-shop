@@ -34,11 +34,20 @@ public class BarberController {
         return ResponseEntity.created(uri).build();
     }
 
-    @PutMapping("update")
+    @PutMapping("/update")
     @Transactional
     public ResponseEntity updateBarber(@RequestBody BarberUpdateDTO request){
 
         barberService.updateBarber(request);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @Transactional
+    public ResponseEntity deleteBarber(@PathVariable Long id){
+
+        barberService.deleteBarber(id);
 
         return ResponseEntity.noContent().build();
     }

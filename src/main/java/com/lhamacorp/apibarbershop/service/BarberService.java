@@ -45,4 +45,10 @@ public class BarberService {
 
         return barberUpdatedData;
     }
+
+    public void deleteBarber(Long idBarber){
+
+        Barber barber = barberRepository.getReferenceById(idBarber);
+        barber.setActive(false);
+    }
 }
