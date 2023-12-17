@@ -1,6 +1,7 @@
 package com.lhamacorp.apibarbershop.controller;
 
 import com.lhamacorp.apibarbershop.model.DTOs.serviceDTOs.ServiceRegisterDTO;
+import com.lhamacorp.apibarbershop.model.DTOs.serviceDTOs.ServiceUpdateDTO;
 import com.lhamacorp.apibarbershop.service.ServiceService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -32,6 +33,16 @@ public class ServiceController {
 
         return ResponseEntity.ok(serviceService.getAllservices());
     }
+
+    @PutMapping("/update")
+    @Transactional
+    public ResponseEntity updateServiceById(@RequestBody ServiceUpdateDTO request){
+
+        ServiceUpdateDTO serviceUpdateDTO = serviceService.updateService(request);
+
+        return ResponseEntity.ok(serviceUpdateDTO);
+    }
+
 
 
 }

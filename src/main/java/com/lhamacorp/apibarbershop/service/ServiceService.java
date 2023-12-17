@@ -2,6 +2,7 @@ package com.lhamacorp.apibarbershop.service;
 
 import com.lhamacorp.apibarbershop.model.DTOs.serviceDTOs.ServiceDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.serviceDTOs.ServiceRegisterDTO;
+import com.lhamacorp.apibarbershop.model.DTOs.serviceDTOs.ServiceUpdateDTO;
 import com.lhamacorp.apibarbershop.repository.ServiceRepository;
 import com.lhamacorp.apibarbershop.model.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +28,26 @@ public class ServiceService {
 
         List<ServiceDTO> list = serviceRepository.findAllByActiveTrue();
         return list;
+    }
+
+    public ServiceUpdateDTO updateService(ServiceUpdateDTO serviceData){
+
+        Service service = serviceRepository.getReferenceById(serviceData.idService());
+
+        if(serviceData.name() != null){
+            service.setName(serviceData.name());
+        }
+        if(serviceData.description() != null){
+            service.setDescription(serviceData.description());
+        }
+        if(serviceData.duration() != null){
+            service.setDuration(serviceData.duration());
+        }
+        if(serviceData.price() != null){
+            service.setPrice(serviceData.price());
+        }
+
+        return new ServiceUpdateDTO(service);
+
     }
 }
