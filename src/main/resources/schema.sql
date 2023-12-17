@@ -1,10 +1,9 @@
-DROP ALL OBJECTS;
 CREATE TABLE IF NOT EXISTS "USER"  (
     id_user INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    user_type VARCHAR(255) NOT NULL
+    user_type INT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS client (
@@ -32,15 +31,6 @@ CREATE TABLE IF NOT EXISTS service (
     active BOOLEAN
 );
 
-CREATE TABLE IF NOT EXISTS available_time (
-    id_available_time INT PRIMARY KEY AUTO_INCREMENT,
-    available_date DATE NOT NULL,
-    start_time TIME NOT NULL,
-    end_time TIME NOT NULL,
-    status VARCHAR(20) DEFAULT 'Available',
-    id_barber  INT,
-    FOREIGN KEY (id_barber) REFERENCES barber(id_barber)
-);
 
 CREATE TABLE IF NOT EXISTS scheduling (
     id_scheduling INT PRIMARY KEY AUTO_INCREMENT,
@@ -49,6 +39,5 @@ CREATE TABLE IF NOT EXISTS scheduling (
     id_available_time INT NOT NULL,
     scheduling_status VARCHAR(20) DEFAULT 'Pending',
     FOREIGN KEY (id_client) REFERENCES client(id_client),
-    FOREIGN KEY (id_service) REFERENCES service(id_service),
-    FOREIGN KEY (id_available_time) REFERENCES available_time(id_available_time)
+    FOREIGN KEY (id_service) REFERENCES service(id_service)
 );

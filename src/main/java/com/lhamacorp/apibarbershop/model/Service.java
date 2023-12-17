@@ -1,5 +1,6 @@
 package com.lhamacorp.apibarbershop.model;
 
+import com.lhamacorp.apibarbershop.model.DTOs.serviceDTOs.ServiceRegisterDTO;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -26,6 +27,14 @@ public class Service {
         this.description = description;
         this.duration = duration;
         this.price = price;
+        this.active = true;
+    }
+
+    public Service(ServiceRegisterDTO serviceRegisterDTO){
+        this.name = serviceRegisterDTO.name();
+        this.description = serviceRegisterDTO.description();
+        this.duration = serviceRegisterDTO.duration();
+        this.price = serviceRegisterDTO.price();
         this.active = true;
     }
 
