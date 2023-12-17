@@ -36,13 +36,20 @@ public class ServiceController {
 
     @PutMapping("/update")
     @Transactional
-    public ResponseEntity updateServiceById(@RequestBody ServiceUpdateDTO request){
+    public ResponseEntity updateService(@RequestBody ServiceUpdateDTO request){
 
         ServiceUpdateDTO serviceUpdateDTO = serviceService.updateService(request);
 
         return ResponseEntity.ok(serviceUpdateDTO);
     }
 
+    @DeleteMapping("delete/{id}")
+    @Transactional
+    public ResponseEntity deleteServiceById(@PathVariable Long id){
 
+        serviceService.deleteServiceById(id);
+
+        return ResponseEntity.noContent().build();
+    }
 
 }

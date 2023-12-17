@@ -50,4 +50,11 @@ public class ServiceService {
         return new ServiceUpdateDTO(service);
 
     }
+
+    public void deleteServiceById(Long id){
+
+        Service service = serviceRepository.getReferenceById(id);
+
+        service.setActive(false);
+    }
 }
