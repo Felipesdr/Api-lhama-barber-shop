@@ -1,5 +1,6 @@
 package com.lhamacorp.apibarbershop.controller;
 
+import com.lhamacorp.apibarbershop.model.DTOs.BarberUnavailableTime.BarberUnavailableTimeDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.BarberUnavailableTime.BarberUnavailableTimeRegisterDTO;
 import com.lhamacorp.apibarbershop.service.BarberUnavaibleTimeService;
 import jakarta.transaction.Transactional;
@@ -10,9 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
-@RequestMapping("barberUnavaibleTime")
+@RequestMapping("barberUnavailableTime")
 public class BarberUnavaibleTimeController {
     @Autowired
     private BarberUnavaibleTimeService service;
@@ -25,4 +27,32 @@ public class BarberUnavaibleTimeController {
 
        return ResponseEntity.created(uri).build();
    }
+
+   @GetMapping("/{idBarber}")
+   public ResponseEntity findAllBarberUnavailableTimeByIdBarberAndActiveTrue(@PathVariable Long idBarber){
+
+       List<BarberUnavailableTimeDTO> list = service.findAllBarberUnavailableTimeByIdBarberAndActiveTrue(idBarber);
+
+       return ResponseEntity.ok(list);
+   }
+
+   @PutMapping("update")
+   @Transactional
+   public ResponseEntity updateBarberUnavailableTimeById(@RequestBody BarberUnavailableTimeDTO request){
+
+       BarberUnavailableTimeDTO updatedBarberUnavailableTime = service.updateBarberUnavailableTime(request);
+
+       return ResponseEntity.ok(updatedBarberUnavailableTime);
+   }
+
+   @DeleteMapping("delete/{idBarberUnavailableTime}")
+   @Transactional
+   public ResponseEntity deleBarberUnavailableTimeById(@PathVariable Long idBarberUnavailableTime){
+
+       service.deleteBarberUnavailableTimeById(idBarberUnavailableTime);
+
+       return ResponseEntity.noContent().build();
+   }
+
+
 }
