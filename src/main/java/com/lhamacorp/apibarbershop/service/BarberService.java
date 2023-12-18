@@ -21,6 +21,13 @@ public class BarberService {
         List<BarberDTO> list = barberRepository.findAllByActiveTrue();
         return list;
     }
+
+    public BarberDTO findBarberById(Long idBarber){
+
+        var barber = barberRepository.findById(idBarber).get();
+
+        return new BarberDTO(barber);
+    }
     public URI registerBarber(BarberRegisterDTO barberData, UriComponentsBuilder uribuilder){
 
         Barber barber = new Barber(barberData);

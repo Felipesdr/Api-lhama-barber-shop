@@ -1,5 +1,6 @@
 package com.lhamacorp.apibarbershop.model;
 
+import com.lhamacorp.apibarbershop.model.DTOs.BarberDTOs.BarberDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.BarberDTOs.BarberRegisterDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.BarberDTOs.BarberUpdateDTO;
 import jakarta.persistence.*;
@@ -39,6 +40,14 @@ public class Barber {
         this.name = barberUpdateDTO.name();
         this.phone = barberUpdateDTO.phone();
         this.description = barberUpdateDTO.description();
+        this.active = true;
+    }
+
+    public Barber(BarberDTO barberDTO){
+        this.idBarber = barberDTO.idBarber();
+        this.name = barberDTO.name();
+        this.phone = barberDTO.phone();
+        this.description = barberDTO.description();
         this.active = true;
     }
 
