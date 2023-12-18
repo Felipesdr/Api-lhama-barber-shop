@@ -19,7 +19,20 @@ CREATE TABLE IF NOT EXISTS barber (
     name VARCHAR(255) NOT NULL,
     phone VARCHAR(15) NOT NULL,
     description VARCHAR(1000),
+    id_barber INT NOT NULL,
     active BOOLEAN
+);
+
+CREATE TABLE IF NOT EXISTS barber_unavable_time (
+    id_unavable_time INT PRIMARY KEY AUTO_INCREMENT,
+    description VARCHAR(255),
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    start_time TIME NOT NULL,
+    end_time TIME NOT NULL,
+    id_barber INT NOT NULL,
+    active BOOLEAN,
+    FOREIGN KEY (id_barber) REFERENCES barber(id_barber)
 );
 
 CREATE TABLE IF NOT EXISTS service (

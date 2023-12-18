@@ -38,9 +38,9 @@ public class BarberController {
     @Transactional
     public ResponseEntity updateBarber(@RequestBody BarberUpdateDTO request){
 
-        barberService.updateBarber(request);
+        BarberUpdateDTO barberUpdateDTO = barberService.updateBarber(request);
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(barberUpdateDTO);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -51,6 +51,5 @@ public class BarberController {
 
         return ResponseEntity.noContent().build();
     }
-
 
 }
