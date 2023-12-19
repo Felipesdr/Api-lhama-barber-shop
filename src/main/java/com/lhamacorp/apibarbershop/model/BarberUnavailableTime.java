@@ -1,7 +1,7 @@
 package com.lhamacorp.apibarbershop.model;
 
 import com.lhamacorp.apibarbershop.model.DTOs.BarberDTOs.BarberDTO;
-import com.lhamacorp.apibarbershop.model.DTOs.BarberUnavailableTime.BarberUnavailableTimeRegisterDTO;
+import com.lhamacorp.apibarbershop.model.DTOs.BarberUnavailableTimeDTOs.BarberUnavailableTimeRegisterDTO;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;

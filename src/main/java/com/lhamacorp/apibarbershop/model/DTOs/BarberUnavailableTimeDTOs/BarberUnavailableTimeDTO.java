@@ -1,4 +1,4 @@
-package com.lhamacorp.apibarbershop.model.DTOs.BarberUnavailableTime;
+package com.lhamacorp.apibarbershop.model.DTOs.BarberUnavailableTimeDTOs;
 
 import com.lhamacorp.apibarbershop.model.BarberUnavailableTime;
 

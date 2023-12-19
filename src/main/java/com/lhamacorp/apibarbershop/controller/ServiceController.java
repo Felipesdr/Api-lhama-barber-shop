@@ -21,7 +21,6 @@ public class ServiceController {
     @PostMapping("/register")
     @Transactional
     public ResponseEntity registerService(@RequestBody @Valid ServiceRegisterDTO request, UriComponentsBuilder uriBuilder){
-        System.out.println(request);
 
         URI uri = serviceService.registerService(request, uriBuilder);
 

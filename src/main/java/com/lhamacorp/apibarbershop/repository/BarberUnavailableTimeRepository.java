@@ -2,7 +2,7 @@ package com.lhamacorp.apibarbershop.repository;
 
 
 import com.lhamacorp.apibarbershop.model.BarberUnavailableTime;
-import com.lhamacorp.apibarbershop.model.DTOs.BarberUnavailableTime.BarberUnavailableTimeDTO;
+import com.lhamacorp.apibarbershop.model.DTOs.BarberUnavailableTimeDTOs.BarberUnavailableTimeDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

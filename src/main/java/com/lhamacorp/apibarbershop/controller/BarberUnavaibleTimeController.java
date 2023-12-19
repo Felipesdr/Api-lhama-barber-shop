@@ -1,7 +1,7 @@
 package com.lhamacorp.apibarbershop.controller;
 
-import com.lhamacorp.apibarbershop.model.DTOs.BarberUnavailableTime.BarberUnavailableTimeDTO;
-import com.lhamacorp.apibarbershop.model.DTOs.BarberUnavailableTime.BarberUnavailableTimeRegisterDTO;
+import com.lhamacorp.apibarbershop.model.DTOs.BarberUnavailableTimeDTOs.BarberUnavailableTimeDTO;
+import com.lhamacorp.apibarbershop.model.DTOs.BarberUnavailableTimeDTOs.BarberUnavailableTimeRegisterDTO;
 import com.lhamacorp.apibarbershop.service.BarberUnavaibleTimeService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
