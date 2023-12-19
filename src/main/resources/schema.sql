@@ -42,11 +42,12 @@ CREATE TABLE IF NOT EXISTS service (
     active BOOLEAN
 );
 
-CREATE TABLE IF NOT EXISTS schedule_exception (
-    id_schedule_exception INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS unavailable_time (
+    id_unavailable_time INT PRIMARY KEY AUTO_INCREMENT,
     description VARCHAR(255),
     start TIMESTAMP NOT NULL,
-    finish TIMESTAMP NOT NULL
+    finish TIMESTAMP NOT NULL,
+    active BOOLEAN
 );
 
 CREATE TABLE IF NOT EXISTS scheduling (
