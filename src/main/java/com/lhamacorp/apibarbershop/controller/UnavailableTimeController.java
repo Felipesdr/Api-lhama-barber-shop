@@ -48,7 +48,7 @@ public class UnavailableTimeController {
 
     @DeleteMapping("/delete/{idUnavailableTime}")
     @Transactional
-    public ResponseEntity deleteUnavailableTimeById(Long idUnavailableTime){
+    public ResponseEntity deleteUnavailableTimeById(@PathVariable Long idUnavailableTime){
 
         service.deleteUnavailableTimeById(idUnavailableTime);
 

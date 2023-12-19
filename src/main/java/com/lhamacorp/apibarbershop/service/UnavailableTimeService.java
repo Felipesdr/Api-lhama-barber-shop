@@ -38,7 +38,7 @@ public class UnavailableTimeService {
         List<UnavailableTimeDTO> allUnavailableTime = repository.findAllByActiveTrue();
 
         List<UnavailableTimeDTO> unavailableTimesBetweenGap = allUnavailableTime.stream()
-                .filter(un -> un.start().isAfter(start) && un.start().isBefore(finish))
+                .filter(un -> un.start().isAfter(start) && un.start().isBefore(finish) )
                 .toList();
 
         return unavailableTimesBetweenGap;
