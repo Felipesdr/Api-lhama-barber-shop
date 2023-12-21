@@ -12,6 +12,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BarberUnavaibleTimeService {
@@ -34,9 +35,9 @@ public class BarberUnavaibleTimeService {
 
     public List<BarberUnavailableTimeDTO> findAllBarberUnavailableTimeByIdBarberAndActiveTrue(Long idBarber){
 
-        List<BarberUnavailableTimeDTO> unavailableTimeDTOList = repository.findAllByBarberIdBarberAndActiveTrue(idBarber);
+        List<BarberUnavailableTime> barberUnavailableTimeList = repository.findAllByBarberIdBarberAndActiveTrue(idBarber);
 
-        return unavailableTimeDTOList;
+        return barberUnavailableTimeList.stream().map(BarberUnavailableTimeDTO::new).collect(Collectors.toList());
     }
 
     public BarberUnavailableTimeDTO updateBarberUnavailableTime(BarberUnavailableTimeDTO updateData){

@@ -1,5 +1,6 @@
 package com.lhamacorp.apibarbershop.model;
 
+import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.ScheduleRegisterDTO;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -11,23 +12,33 @@ public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idSchedule;
-    private LocalDateTime dateTime;
-    @ManyToOne(fetch = FetchType.LAZY)
+    private LocalDateTime start;
+    private LocalDateTime finish;
+    @ManyToOne
     @JoinColumn(name = "idClient")
     private Client client;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "idBarber")
     private Barber barber;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "idService")
     private Service service;
 
     public Schedule() {
     }
 
-    public Schedule(Long idSchedule, LocalDateTime dateTime, Client client, Barber barber, Service service) {
+    public Schedule(Long idSchedule, LocalDateTime start, LocalDateTime finish, Client client, Barber barber, Service service) {
         this.idSchedule = idSchedule;
-        this.dateTime = dateTime;
+        this.start = start;
+        this.finish = finish;
+        this.client = client;
+        this.barber = barber;
+        this.service = service;
+    }
+
+    public Schedule(ScheduleRegisterDTO scheduleRegisterDTO, Client client, Barber barber, Service service){
+        this.start = scheduleRegisterDTO.start();
+        this.finish = scheduleRegisterDTO.start().plusMinutes(service.getDuration());
         this.client = client;
         this.barber = barber;
         this.service = service;
@@ -41,12 +52,20 @@ public class Schedule {
         this.idSchedule = idSchedule;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDateTime getStart() {
+        return start;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setStart(LocalDateTime start) {
+        this.start = start;
+    }
+
+    public LocalDateTime getFinish() {
+        return finish;
+    }
+
+    public void setFinish(LocalDateTime finish) {
+        this.finish = finish;
     }
 
     public Client getClient() {
@@ -85,15 +104,5 @@ public class Schedule {
     public int hashCode() {
         return Objects.hash(idSchedule);
     }
-
-    @Override
-    public String toString() {
-        return "Schedule{" +
-                "idSchedule=" + idSchedule +
-                ", dateTime=" + dateTime +
-                ", client=" + client +
-                ", barber=" + barber +
-                ", service=" + service +
-                '}';
-    }
 }
+

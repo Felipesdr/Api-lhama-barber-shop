@@ -11,6 +11,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UnavailableTimeService {
@@ -30,14 +31,18 @@ public class UnavailableTimeService {
 
     public List<UnavailableTimeDTO> findAllUnavailableTime(){
 
-        return repository.findAllByActiveTrue();
+        List<UnavailableTime> unavailableTimeList = repository.findAllByActiveTrue();
+
+        return unavailableTimeList.stream().map(UnavailableTimeDTO::new).collect(Collectors.toList());
     }
 
     public List<UnavailableTimeDTO> findUnavailableTimesBetweenGap(LocalDateTime start, LocalDateTime finish){
 
-        List<UnavailableTimeDTO> allUnavailableTime = repository.findAllByActiveTrue();
+        List<UnavailableTime> allUnavailableTime = repository.findAllByActiveTrue();
 
-        List<UnavailableTimeDTO> unavailableTimesBetweenGap = allUnavailableTime.stream()
+        List<UnavailableTimeDTO> allUnavailableTimeDTOList = allUnavailableTime.stream().map(UnavailableTimeDTO::new).collect(Collectors.toList());
+
+        List<UnavailableTimeDTO> unavailableTimesBetweenGap = allUnavailableTimeDTOList.stream()
                 .filter(un -> un.start().isAfter(start) && un.start().isBefore(finish) )
                 .toList();
 

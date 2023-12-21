@@ -55,7 +55,8 @@ CREATE TABLE IF NOT EXISTS schedule (
     id_client INT NOT NULL,
     id_service INT NOT NULL,
     id_barber INT NOT NULL,
-    schedule_status INT NOT NULL,
+    start TIMESTAMP NOT NULL,
+    finish TIMESTAMP NOT NULL,
     FOREIGN KEY (id_client) REFERENCES client(id_client),
     FOREIGN KEY (id_service) REFERENCES service(id_service),
     FOREIGN KEY (id_barber) REFERENCES barber(id_barber)

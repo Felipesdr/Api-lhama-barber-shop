@@ -1,5 +1,6 @@
 package com.lhamacorp.apibarbershop.model;
 
+import com.lhamacorp.apibarbershop.model.DTOs.UnavailableTimeDTOs.UnavailableTimeDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.UnavailableTimeDTOs.UnavailableTimeRegisterDTO;
 import jakarta.persistence.*;
 
@@ -26,6 +27,14 @@ public class UnavailableTime {
         this.description = description;
         this.start = start;
         this.finish = finish;
+        this.active = true;
+    }
+
+    public UnavailableTime(UnavailableTimeDTO unavailableTimeDTO) {
+        this.idUnavailableTime = unavailableTimeDTO.idUnavailableTime();
+        this.description = unavailableTimeDTO.description();
+        this.start = unavailableTimeDTO.start();
+        this.finish = unavailableTimeDTO.finish();
         this.active = true;
     }
 

@@ -11,6 +11,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BarberService {
@@ -18,8 +19,10 @@ public class BarberService {
     private BarberRepository barberRepository;
     public List<BarberDTO> findAllBarbersByActiveTrue(){
 
-        List<BarberDTO> list = barberRepository.findAllByActiveTrue();
-        return list;
+        List<Barber> list = barberRepository.findAllByActiveTrue();
+
+        return list.stream().map(BarberDTO::new).collect(Collectors.toList());
+
     }
 
     public BarberDTO findBarberById(Long idBarber){

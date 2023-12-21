@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface UnavailableTimeRepository extends JpaRepository<UnavailableTime, Long> {
 
-    List<UnavailableTimeDTO> findAllByActiveTrue();
+    List<UnavailableTime> findAllByActiveTrue();
 
 }

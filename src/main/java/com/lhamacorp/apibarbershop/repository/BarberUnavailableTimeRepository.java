@@ -10,5 +10,5 @@ import java.util.List;
 
 @Repository
 public interface BarberUnavailableTimeRepository extends JpaRepository<BarberUnavailableTime, Long> {
-    List<BarberUnavailableTimeDTO> findAllByBarberIdBarberAndActiveTrue(Long idBarber);
+    List<BarberUnavailableTime> findAllByBarberIdBarberAndActiveTrue(Long idBarber);
 }

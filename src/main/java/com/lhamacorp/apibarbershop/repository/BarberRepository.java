@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface BarberRepository extends JpaRepository<Barber, Long> {
 
-    List<BarberDTO> findAllByActiveTrue();
+    List<Barber> findAllByActiveTrue();
 }

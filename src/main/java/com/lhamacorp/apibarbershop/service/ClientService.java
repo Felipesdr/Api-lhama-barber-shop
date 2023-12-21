@@ -16,11 +16,12 @@ import java.util.List;
 public class ClientService {
 
     @Autowired
+
     private ClientRepository clientRepository;
 
-    public URI registerClient(ClientRegisterDTO clientData, UriComponentsBuilder uriBuilder){
+    public URI registerClient(ClientRegisterDTO clientRegisterData, UriComponentsBuilder uriBuilder){
 
-        Client client = new Client(clientData);
+        Client client = new Client(clientRegisterData);
         clientRepository.save(client);
         URI uri = uriBuilder.path("/client/{id}").buildAndExpand(client.getIdClient()).toUri();
 
