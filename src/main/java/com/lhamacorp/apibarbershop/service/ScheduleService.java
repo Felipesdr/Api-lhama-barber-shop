@@ -24,6 +24,8 @@ public class ScheduleService {
     @Autowired
     private BarberUnavailableTimeRepository barberUnavailableTimeRepository;
 
+    public List<Schedule> findAllScheduleByBarberid;
+
     public Long registerSchedule(ScheduleRegisterDTO scheduleRegisterData){
 
         //Validate idClient
@@ -79,7 +81,7 @@ public class ScheduleService {
 
             //If barber has no unavailable time conflicts with schedule date time, add it to available barbers list
             for(BarberUnavailableTime BUT : tempList) {
-                if(barberValidator.validateBarber(scheduleRegisterData, BUT)) {
+                if(barberValidator.validateBarberUnavailableTime(scheduleRegisterData, BUT)) {
                 } else {
 
                     availableBarberList.add(B);
