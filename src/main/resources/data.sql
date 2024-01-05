@@ -1,59 +1,77 @@
---Insert barber data
-MERGE INTO barber KEY (id_barber)
-VALUES (1, 'Robson motoserra', '123456789', 'Cortes de cabelo tão radicais que parecem feitos com uma motosserra!',  true);
 
-MERGE INTO barber KEY (id_barber)
-VALUES (2, 'Pedro Cabeludo', '123456789', 'Barbeiro experiente, pronto para transformar seu visual com estilo e precisão.',  true);
+INSERT INTO barber (name, phone, description, active)
+VALUES ('Robson motoserra', '123456789', 'Cortes de cabelo tão radicais que parecem feitos com uma motosserra!',  true);
 
-MERGE INTO barber KEY (id_barber)
-VALUES (3, 'Leôncio Lenhador', '123456789', 'Barbeiro experiente, pronto para transformar seu visual com estilo e precisão.',  true);
+INSERT INTO barber (name, phone, description, active)
+VALUES ('Pedro Cabeludo', '123456789', 'Barbeiro experiente, pronto para transformar seu visual com estilo e precisão.',  true);
+
+INSERT INTO barber (name, phone, description, active)
+VALUES ('Leôncio Lenhador', '123456789', 'Barbeiro experiente, pronto para transformar seu visual com estilo e precisão.',  true);
 
 --Insert Barber unavailable time
-MERGE INTO barber_unavailable_time KEY (id_barber_unavailable_time)
-VALUES (1, 'Carnaval', '2024-02-10 09:00:00', '2024-02-13 18:00:00', 1, TRUE);
+INSERT INTO barber_unavailable_time(description, start, finish, id_barber, active)
+VALUES ('Carnaval', '2024-02-10 09:00:00', '2024-02-13 18:00:00', 1, TRUE);
 
-MERGE INTO barber_unavailable_time KEY (id_barber_unavailable_time)
-VALUES (2, 'Carnaval', '2024-02-10 09:00:00', '2024-02-13 18:00:00', 3, TRUE);
+INSERT INTO barber_unavailable_time(description, start, finish, id_barber, active)
+VALUES ('Carnaval', '2024-02-10 09:00:00', '2024-02-13 18:00:00', 3, TRUE);
 
 --Insert Client Data
-MERGE INTO CLIENT KEY (id_client)
-VALUES (1, 'Vera Fischer', 'verafischer@gmail.com', '123-456-7890', true);
+INSERT INTO CLIENT (name, email, phone, active)
+VALUES ('Vera Fischer', 'verafischer@gmail.com', '123-456-7890', true);
 
-MERGE INTO CLIENT KEY (id_client)
-VALUES (2, 'Agnaldo Timoteo', 'agnaldo@gmail.com', '123-456-7890', true);
+INSERT INTO CLIENT (name, email, phone, active)
+VALUES ('Agnaldo Timoteo', 'agnaldo@gmail.com', '123-456-7890', true);
 
-MERGE INTO CLIENT KEY (id_client)
-VALUES (3, 'Bruna Marquezine', 'bruna@gmail.com', '123-456-7890', true);
+INSERT INTO CLIENT (name, email, phone, active)
+VALUES ('Bruna Marquezine', 'bruna@gmail.com', '123-456-7890', true);
 
 --Insert Service data
-MERGE INTO service KEY (id_service)
-VALUES (1, 'Cabelo', 'Corte de cabelo', 45, 45.00, true);
+INSERT INTO service (name, description, duration, price, active)
+VALUES ('Cabelo', 'Corte de cabelo', 45, 45.00, true);
 
-MERGE INTO service KEY (id_service)
-VALUES (2, 'Barba', 'Corte de barba', 45, 45.00, true);
+INSERT INTO service (name, description, duration, price, active)
+VALUES ('Barba', 'Corte de barba', 45, 45.00, true);
 
-MERGE INTO service KEY (id_service)
-VALUES (3, 'Sobrancelha', 'Alinhamento de sobrancelha', 10, 15.00, true);
+INSERT INTO service (name, description, duration, price, active)
+VALUES ('Sobrancelha', 'Alinhamento de sobrancelha', 10, 15.00, true);
 
 --Insert Unavailable time data
-MERGE INTO unavailable_time KEY (id_unavailable_time)
-VALUES (1, 'Sexta feira santa', '2024-03-29 09:00:00', '2024-03-29 18:00:00', true);
+INSERT INTO unavailable_time (description, start, finish, active)
+VALUES ('Sexta feira santa', '2024-03-29 09:00:00', '2024-03-29 18:00:00', true);
 
 --Insert Schedule status data
-MERGE INTO schedule_status KEY (id_schedule_status)
-VALUES (1, 'pending');
+INSERT INTO schedule_status (status)
+VALUES ('pending');
 
-MERGE INTO schedule_status KEY (id_schedule_status)
-VALUES (2, 'confirmed');
+INSERT INTO schedule_status (status)
+VALUES ('confirmed');
 
-MERGE INTO schedule_status KEY (id_schedule_status)
-VALUES (3, 'executing');
+INSERT INTO schedule_status (status)
+VALUES ('executing');
 
-MERGE INTO schedule_status KEY (id_schedule_status)
-VALUES (4, 'finished');
+INSERT INTO schedule_status (status)
+VALUES ('finished');
 
-MERGE INTO schedule_status KEY (id_schedule_status)
-VALUES (5, 'canceled');
+INSERT INTO schedule_status (status)
+VALUES ('canceled');
+
+--Insert Schedule data
+INSERT INTO schedule(id_client, id_service, id_barber, start, finish, id_schedule_status)
+VALUES (1, 1, 1, '2024-03-03 09:00:00', '2024-03-03 09:45:00', 2);
+
+INSERT INTO schedule(id_client, id_service, id_barber, start, finish, id_schedule_status)
+VALUES (2, 1, 2, '2024-03-03 09:00:00', '2024-03-03 09:45:00', 2);
+
+INSERT INTO schedule(id_client, id_service, id_barber, start, finish, id_schedule_status)
+VALUES (1, 1, 3, '2024-05-05 09:00:00', '2023-05-05 09:45:00', 2);
+
+INSERT INTO schedule(id_client, id_service, id_barber, start, finish, id_schedule_status)
+VALUES (1, 1, 3, '2024-06-06 09:00:00', '2023-06-06 09:45:00', 2);
+
+INSERT INTO schedule(id_client, id_service, id_barber, start, finish, id_schedule_status)
+VALUES (1, 1, 3, '2024-07-07 09:00:00', '2023-07-07 09:45:00', 5);
+
+
 
 
 
