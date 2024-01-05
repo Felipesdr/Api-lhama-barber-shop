@@ -24,9 +24,20 @@ public class Schedule {
     @JoinColumn(name = "idService")
     private Service service;
 
-    private Integer scheduleStatus;
+    private Integer idScheduleStatus;
+
 
     public Schedule() {
+    }
+
+    public Schedule(Long idSchedule, LocalDateTime start, LocalDateTime finish, Client client, Barber barber, Service service, Integer idScheduleStatus) {
+        this.idSchedule = idSchedule;
+        this.start = start;
+        this.finish = finish;
+        this.client = client;
+        this.barber = barber;
+        this.service = service;
+        this.idScheduleStatus = idScheduleStatus;
     }
 
     public Schedule(Long idSchedule, LocalDateTime start, LocalDateTime finish, Client client, Barber barber, Service service) {
@@ -36,7 +47,7 @@ public class Schedule {
         this.client = client;
         this.barber = barber;
         this.service = service;
-        this.scheduleStatus = 1;
+        this.idScheduleStatus = 1;
     }
 
     public Schedule(ScheduleRegisterDTO scheduleRegisterDTO, Client client, Barber barber, Service service){
@@ -45,7 +56,7 @@ public class Schedule {
         this.client = client;
         this.barber = barber;
         this.service = service;
-        this.scheduleStatus = 1;
+        this.idScheduleStatus = 1;
     }
 
     public Long getIdSchedule() {
@@ -97,11 +108,11 @@ public class Schedule {
     }
 
     public Integer getScheduleStatus() {
-        return scheduleStatus;
+        return idScheduleStatus;
     }
 
     public void setScheduleStatus(Integer scheduleStatus) {
-        this.scheduleStatus = scheduleStatus;
+        this.idScheduleStatus = scheduleStatus;
     }
 
     @Override

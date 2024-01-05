@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,9 +34,9 @@ public class BarberUnavaibleTimeService {
         return uri;
     }
 
-    public List<BarberUnavailableTimeDTO> findAllBarberUnavailableTimeByIdBarberAndActiveTrue(Long idBarber){
+    public List<BarberUnavailableTimeDTO> findAllFutureBarberUnavailableTimeByIdBarberAndActiveTrue(Long idBarber){
 
-        List<BarberUnavailableTime> barberUnavailableTimeList = repository.findAllByBarberIdBarberAndActiveTrue(idBarber);
+        List<BarberUnavailableTime> barberUnavailableTimeList = repository.findAllByBarberIdBarberAndActiveTrueAndStartAfter(idBarber, LocalDateTime.now());
 
         return barberUnavailableTimeList.stream().map(BarberUnavailableTimeDTO::new).collect(Collectors.toList());
     }
