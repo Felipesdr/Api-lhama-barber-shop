@@ -1,11 +1,12 @@
-package com.lhamacorp.apibarbershop.model.validations.scheduleValidations;
+package com.lhamacorp.apibarbershop.model.validations;
 
 import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.ScheduleRegisterDTO;
 import jakarta.validation.ValidationException;
+import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
-
+@Component
 public class ScheduleValidations {
 
     public void businessHoursValidation(ScheduleRegisterDTO scheduleData){
@@ -33,4 +34,6 @@ public class ScheduleValidations {
         }
 
     }
+
+
 }

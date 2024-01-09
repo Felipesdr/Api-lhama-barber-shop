@@ -4,7 +4,8 @@ import com.lhamacorp.apibarbershop.exceptions.IdValidationException;
 import com.lhamacorp.apibarbershop.model.*;
 import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.ScheduleDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.ScheduleRegisterDTO;
-import com.lhamacorp.apibarbershop.model.validations.barberValidations.BarberUnavailableTimeValidation;
+import com.lhamacorp.apibarbershop.model.validations.BarberValidation;
+import com.lhamacorp.apibarbershop.model.validations.ScheduleValidations;
 import com.lhamacorp.apibarbershop.repository.*;
 import com.lhamacorp.apibarbershop.utilities.RandomPicker;
 import jakarta.validation.ValidationException;
@@ -26,10 +27,14 @@ public class ScheduleService {
     private BarberRepository barberRepository;
     @Autowired
     private BarberUnavailableTimeRepository barberUnavailableTimeRepository;
+    @Autowired
+    BarberValidation barberValidator;
+    @Autowired
+    ScheduleValidations scheduleValidator;
 
     public List<ScheduleDTO> findAllFutureSchedulesNotCanceledByIdBarber(Long idBarber){
 
-        //Id schedule status 5 = caanceled
+        //Id schedule status 5 = canceled
         List<Schedule> scheduleList = scheduleRepository.findAllByBarberIdBarberAndStartAfterAndIdScheduleStatusNot(idBarber, LocalDateTime.now(), 5);
 
         return scheduleList.stream().map(ScheduleDTO::new).toList();
@@ -53,6 +58,11 @@ public class ScheduleService {
         if(scheduleRegisterData.idBarber()!= null && !barberRepository.existsById(scheduleRegisterData.idBarber())){
             throw new IdValidationException("Id do barbeiro não encontrado");
         }
+
+        //Validate business hours
+        scheduleValidator.businessHoursValidation(scheduleRegisterData);
+
+
         Client client = clientRepository.findById(scheduleRegisterData.idClient()).get();
         Barber barber = chooseBarber(scheduleRegisterData);
         Service service = serviceRepository.findById(scheduleRegisterData.idService()).get();
@@ -66,8 +76,15 @@ public class ScheduleService {
     private Barber chooseBarber(ScheduleRegisterDTO scheduleRegisterData){
 
         //If idBarber is informed, choose barber by id
-        if(scheduleRegisterData.idBarber() != null){
-            return barberRepository.findById(scheduleRegisterData.idBarber()).get();
+        if(scheduleRegisterData.idBarber() != null ){
+
+            if(barberValidator.validateBarberById(scheduleRegisterData)){
+
+                return barberRepository.findById(scheduleRegisterData.idBarber()).get();
+
+            }else{
+                throw new ValidationException("Esse barbeiro está indisponível para essa data");
+            }
         }
 
         //If idBarber is not informed choose random barber
@@ -77,8 +94,6 @@ public class ScheduleService {
     }
 
     public List<Barber> findAvailableBarbers(ScheduleRegisterDTO scheduleRegisterData){
-
-        BarberUnavailableTimeValidation barberValidator = new BarberUnavailableTimeValidation();
 
         List<Barber> allBarbers = barberRepository.findAllByActiveTrue();
         List<Barber> availableBarberList = new ArrayList<>();

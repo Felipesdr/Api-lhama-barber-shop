@@ -1,7 +1,9 @@
 package com.lhamacorp.apibarbershop.model.validations;
 
-import java.time.LocalDateTime;
+import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+@Component
 public class IntervalValidation {
 
 
