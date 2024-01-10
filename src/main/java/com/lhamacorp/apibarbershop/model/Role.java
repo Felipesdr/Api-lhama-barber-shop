@@ -2,6 +2,8 @@ package com.lhamacorp.apibarbershop.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity(name = "Role")
 @Table(name = "role")
 public class Role {
@@ -10,13 +12,16 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @ManyToMany(mappedBy = "roles")
+    private List<User> users;
 
     public Role() {
     }
 
-    public Role(Long id, String name) {
+    public Role(Long id, String name, List<User> users) {
         this.id = id;
         this.name = name;
+        this.users = users;
     }
 
     public Long getId() {
@@ -35,4 +40,11 @@ public class Role {
         this.name = name;
     }
 
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
 }
