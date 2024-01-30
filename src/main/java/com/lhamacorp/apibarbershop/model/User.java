@@ -22,29 +22,25 @@ public class User implements UserDetails {
     private String name;
     private String email;
     private String password;
-    @ManyToMany
-    @JoinTable(
-            name = "userRole",
-            joinColumns = @JoinColumn(name = "idUser"),
-            inverseJoinColumns = @JoinColumn(name =  "idRole")
-    )
-    List<Role> roles;
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
     public User() {
     }
 
-    public User(Long idUser, String name, String email, String password, List<Role> roles) {
+    public User(Long idUser, String name, String email, String password, UserRole role) {
         this.idUser = idUser;
         this.name = name;
         this.email = email;
         this.password = password;
-        this.roles = roles;
+        this.role = role;
     }
 
     public User(UserRegisterDTO userRegisterDTO){
         this.name = userRegisterDTO.name();
         this.email = userRegisterDTO.email();;
         this.password = userRegisterDTO.password();
+        this.role = UserRole.CLIENT;
     }
 
     public Long getIdUser() {
@@ -73,7 +69,21 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+
+        switch(this.role){
+
+            case ADMIN:
+                return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_BARBER"), new SimpleGrantedAuthority("ROLE_CLIENT"));
+
+            case BARBER:
+                return List.of(new SimpleGrantedAuthority("ROLE_BARBER"), new SimpleGrantedAuthority("ROLE_CLIENT"));
+
+            case CLIENT:
+                return List.of(new SimpleGrantedAuthority("ROLE_CLIENT"));
+
+            default:
+                return List.of();
+        }
     }
 
     public String getPassword() {
@@ -109,12 +119,12 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public List<Role> getRoles() {
-        return roles;
+    public UserRole getRole() {
+        return role;
     }
 
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
+    public void setRole(UserRole role) {
+        this.role = role;
     }
 
     @Override
@@ -128,5 +138,16 @@ public class User implements UserDetails {
     @Override
     public int hashCode() {
         return Objects.hash(email);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "idUser=" + idUser +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                '}';
     }
 }

@@ -71,8 +71,8 @@ VALUES (1, 1, 3, '2024-06-06 09:00:00', '2023-06-06 09:45:00', 2);
 INSERT INTO schedule(id_client, id_service, id_barber, start, finish, id_schedule_status)
 VALUES (1, 1, 3, '2024-07-07 09:00:00', '2023-07-07 09:45:00', 5);
 
-INSERT INTO users(name, email, password)
-VALUES('Jali Enra Bei', 'jalienrabei@gmail.com', '$2a$10$Y50UaMFOxteibQEYLrwuHeehHYfcoafCopUazP12.rqB41bsolF5.');
+INSERT INTO users(name, email, password, phone, role)
+VALUES('Jali Enra Bei', 'jalienrabei@gmail.com', '$2a$12$F26Oa/jGC.Gbc53eCGi6b.xmZEIINiPEsZ/1F4L1QHOtNX9cDgXyG', '16992455588', 'ADMIN');
 
 
 

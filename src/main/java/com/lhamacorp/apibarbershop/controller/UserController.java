@@ -19,11 +19,30 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("register")
+    @PostMapping("/register/client")
     @Transactional
-    public ResponseEntity registerUser(@RequestBody UserRegisterDTO userRegisterData, UriComponentsBuilder uriBuilder){
+    public ResponseEntity registerUserClient(@RequestBody UserRegisterDTO userRegisterData, UriComponentsBuilder uriBuilder){
 
-        URI uri = userService.registerUser(userRegisterData, uriBuilder);
+        if(userService.registerUserClient(userRegisterData) == null){
+
+            return ResponseEntity.badRequest().build();
+        }
+
+        URI uri = uriBuilder.path("register/{id}").buildAndExpand(userService.registerUserClient(userRegisterData)).toUri();
+
+        return ResponseEntity.created(uri).build();
+    }
+
+    @PostMapping("/register/barber")
+    @Transactional
+    public ResponseEntity registerUserBarber(@RequestBody UserRegisterDTO userRegisterData, UriComponentsBuilder uriBuilder){
+
+        if(userService.registerUserClient(userRegisterData) == null){
+
+            return ResponseEntity.badRequest().build();
+        }
+
+        URI uri = uriBuilder.path("register/{id}").buildAndExpand(userService.registerUserBarber(userRegisterData)).toUri();
 
         return ResponseEntity.created(uri).build();
     }

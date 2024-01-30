@@ -4,19 +4,9 @@ CREATE TABLE IF NOT EXISTS users  (
     id_user INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS role (
-    id_role INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL
-);
-CREATE TABLE IF NOT EXISTS user_role (
-    id_user int NOT NULL,
-    id_role int NOT NULL,
-    PRIMARY KEY (id_user, id_role),
-    FOREIGN KEY (id_user) REFERENCES users(id_user),
-    FOREIGN KEY (id_role) REFERENCES role(id_role)
+    password VARCHAR(255) NOT NULL,
+    phone VARCHAR(15) NOT NULL,
+    role VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS client (

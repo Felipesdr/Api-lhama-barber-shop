@@ -1,6 +1,10 @@
 package com.lhamacorp.apibarbershop.controller;
 
+import com.lhamacorp.apibarbershop.infra.security.TokenJWTDTO;
+import com.lhamacorp.apibarbershop.infra.security.TokenService;
 import com.lhamacorp.apibarbershop.model.DTOs.AutenticationDTO.AutenticationDTO;
+import com.lhamacorp.apibarbershop.model.User;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,17 +22,18 @@ public class AutenticationController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
-    @PostMapping
-    public ResponseEntity login(@RequestBody AutenticationDTO request){
-        try{
-            UsernamePasswordAuthenticationToken token  = new UsernamePasswordAuthenticationToken(request.email(), request.password());
-            Authentication authetication = authenticationManager.authenticate(token);
 
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @Autowired
+    private TokenService tokenService;
+    @PostMapping
+    public ResponseEntity login(@RequestBody @Valid AutenticationDTO request){
+
+        UsernamePasswordAuthenticationToken authenticationToken  = new UsernamePasswordAuthenticationToken(request.email(), request.password());
+        Authentication authetication = authenticationManager.authenticate(authenticationToken);
+
+        String tokenJWT = tokenService.generateToken((User) authetication.getPrincipal());
+
+        return ResponseEntity.ok(new TokenJWTDTO(tokenJWT));
 
     }
 }
