@@ -11,5 +11,5 @@ import java.util.List;
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
 
-    List<Schedule> findAllByBarberIdBarberAndStartAfterAndIdScheduleStatusNot(Long idBarber, LocalDateTime start, Integer idScheduleStatus);
+    List<Schedule> findAllByBarberIdUserAndStartAfterAndIdScheduleStatusNot(Long idUserBarber, LocalDateTime start, Integer idScheduleStatus);
 }

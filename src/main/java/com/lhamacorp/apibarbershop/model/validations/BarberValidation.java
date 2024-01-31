@@ -5,10 +5,8 @@ import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.ScheduleRegisterDTO;
 import com.lhamacorp.apibarbershop.model.Schedule;
 import com.lhamacorp.apibarbershop.repository.BarberUnavailableTimeRepository;
 import com.lhamacorp.apibarbershop.repository.ScheduleRepository;
-import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -28,7 +26,7 @@ public class BarberValidation {
 
     public boolean validateBarberById(ScheduleRegisterDTO data){
 
-        List<BarberUnavailableTime> barberUnavailableTimeList = barberUnavailableTimeRepository.findAllByBarberIdBarberAndActiveTrueAndStartAfter(data.idBarber(), LocalDateTime.now());
+        List<BarberUnavailableTime> barberUnavailableTimeList = barberUnavailableTimeRepository.findAllByBarberIdUserAndActiveTrueAndStartAfter(data.idBarber(), LocalDateTime.now());
 
         for(BarberUnavailableTime UT : barberUnavailableTimeList){
 
@@ -44,7 +42,7 @@ public class BarberValidation {
             }
         }
 
-        List<Schedule> barberScheduleList = scheduleRepository.findAllByBarberIdBarberAndStartAfterAndIdScheduleStatusNot(data.idBarber(), LocalDateTime.now(), 5);
+        List<Schedule> barberScheduleList = scheduleRepository.findAllByBarberIdUserAndStartAfterAndIdScheduleStatusNot(data.idBarber(), LocalDateTime.now(), 5);
 
         for(Schedule S : barberScheduleList){
 

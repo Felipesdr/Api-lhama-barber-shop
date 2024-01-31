@@ -9,9 +9,9 @@ public record ScheduleDTO(Long idSchedule, Long idClient, Long idService, Long i
     public ScheduleDTO(Schedule schedule){
         this(
                 schedule.getIdSchedule(),
-                schedule.getClient().getIdClient(),
+                schedule.getClient().getIdUser(),
                 schedule.getService().getIdService(),
-                schedule.getBarber().getIdBarber(),
+                schedule.getBarber().getIdUser(),
                 schedule.getStart(),
                 schedule.getFinish(),
                 schedule.getScheduleStatus()

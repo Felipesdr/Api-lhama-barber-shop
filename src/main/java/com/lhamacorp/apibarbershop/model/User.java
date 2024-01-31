@@ -1,9 +1,8 @@
 package com.lhamacorp.apibarbershop.model;
 
-import com.lhamacorp.apibarbershop.model.DTOs.UserRegisterDTO;
+import com.lhamacorp.apibarbershop.model.DTOs.Users.UserDTO;
+import com.lhamacorp.apibarbershop.model.DTOs.Users.UserRegisterDTO;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,25 +21,38 @@ public class User implements UserDetails {
     private String name;
     private String email;
     private String password;
+    private String phone;
     @Enumerated(EnumType.STRING)
     private UserRole role;
+    private boolean active;
 
     public User() {
     }
 
-    public User(Long idUser, String name, String email, String password, UserRole role) {
+    public User(Long idUser, String name, String email, String password, String phone, UserRole role) {
         this.idUser = idUser;
         this.name = name;
         this.email = email;
         this.password = password;
+        this.phone = phone;
         this.role = role;
+        this.active = true;
     }
 
     public User(UserRegisterDTO userRegisterDTO){
         this.name = userRegisterDTO.name();
         this.email = userRegisterDTO.email();;
         this.password = userRegisterDTO.password();
+        this.phone = userRegisterDTO.phone();
         this.role = UserRole.CLIENT;
+        this.active = true;
+    }
+
+    public User(UserDTO userDTO){
+        this.idUser = userDTO.idUser();
+        this.name = userDTO.name();
+        this.email = userDTO.email();
+
     }
 
     public Long getIdUser() {
@@ -65,6 +77,22 @@ public class User implements UserDetails {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     @Override

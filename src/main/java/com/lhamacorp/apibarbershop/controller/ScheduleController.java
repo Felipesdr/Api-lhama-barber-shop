@@ -1,6 +1,6 @@
 package com.lhamacorp.apibarbershop.controller;
 
-import com.lhamacorp.apibarbershop.model.DTOs.BarberDTOs.BarberDTO;
+import com.lhamacorp.apibarbershop.model.DTOs.Users.UserDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.ScheduleDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.ScheduleRegisterDTO;
 import com.lhamacorp.apibarbershop.service.ScheduleService;
@@ -41,11 +41,11 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BarberDTO>> findAllAvailableBarbers(@RequestParam LocalDateTime start, @RequestParam Long idClient, @RequestParam Long idService, @RequestParam Integer duration){
+    public ResponseEntity<List<UserDTO>> findAllAvailableBarbers(@RequestParam LocalDateTime start, @RequestParam Long idClient, @RequestParam Long idService, @RequestParam Integer duration){
 
         ScheduleRegisterDTO scheduleRegisterDTO = new ScheduleRegisterDTO(start, duration, idClient, null, idService);
 
-        List<BarberDTO> barberDTOList = scheduleService.findAvailableBarbers(scheduleRegisterDTO).stream().map(BarberDTO::new).toList();
+        List<UserDTO> barberDTOList = scheduleService.findAvailableBarbers(scheduleRegisterDTO).stream().map(UserDTO::new).toList();
 
         return ResponseEntity.ok(barberDTOList);
     }

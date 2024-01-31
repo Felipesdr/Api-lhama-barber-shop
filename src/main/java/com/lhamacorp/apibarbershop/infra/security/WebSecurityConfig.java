@@ -24,14 +24,14 @@ public class WebSecurityConfig {
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(sm-> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(sm-> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))/*
                 .authorizeHttpRequests(authorize-> authorize
                         .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll()
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/user/register/client").permitAll()
                         .requestMatchers(HttpMethod.POST, "/user/register/barber").hasRole("ADMIN")
                         .anyRequest().authenticated()
-                )
+                )*/
                 .headers(h-> h.disable());
 
 

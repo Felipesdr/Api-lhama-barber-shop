@@ -23,7 +23,9 @@ public class BarberUnavaibleTimeController {
    @Transactional
    public ResponseEntity registerBarberUnavaibleTime(@RequestBody @Valid BarberUnavailableTimeRegisterDTO request, UriComponentsBuilder uriBuilder){
 
-       URI uri = service.registerBarberUnavaibleTime(request, uriBuilder);
+       Long idBarberUnavailableTime = service.registerBarberUnavaibleTime(request);
+
+       URI uri = uriBuilder.path("barberUnavailableTime/register/{id}").buildAndExpand(idBarberUnavailableTime).toUri();
 
        return ResponseEntity.created(uri).build();
    }

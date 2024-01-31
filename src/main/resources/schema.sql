@@ -6,23 +6,8 @@ CREATE TABLE IF NOT EXISTS users  (
     email VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
     phone VARCHAR(15) NOT NULL,
-    role VARCHAR(255) NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS client (
-    id_client INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    phone VARCHAR(15) NOT NULL,
-    active BOOLEAN
-);
-
-CREATE TABLE IF NOT EXISTS barber (
-    id_barber INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL,
-    phone VARCHAR(15) NOT NULL,
-    description VARCHAR(1000),
-    active BOOLEAN
+    role VARCHAR(255) NOT NULL,
+    active BOOLEAN NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS barber_unavailable_time (
@@ -32,7 +17,7 @@ CREATE TABLE IF NOT EXISTS barber_unavailable_time (
     finish TIMESTAMP NOT NULL,
     id_barber INT NOT NULL,
     active BOOLEAN,
-    FOREIGN KEY (id_barber) REFERENCES barber(id_barber)
+    FOREIGN KEY (id_barber) REFERENCES users(id_user)
 );
 
 CREATE TABLE IF NOT EXISTS service (
@@ -65,8 +50,8 @@ CREATE TABLE IF NOT EXISTS schedule (
     start TIMESTAMP NOT NULL,
     finish TIMESTAMP NOT NULL,
     id_schedule_status INT DEFAULT 1,
-    FOREIGN KEY (id_client) REFERENCES client(id_client),
+    FOREIGN KEY (id_client) REFERENCES users(id_user),
     FOREIGN KEY (id_service) REFERENCES service(id_service),
-    FOREIGN KEY (id_barber) REFERENCES barber(id_barber),
+    FOREIGN KEY (id_barber) REFERENCES users(id_user),
     FOREIGN KEY (id_schedule_status) REFERENCES schedule_status(id_schedule_status)
 );

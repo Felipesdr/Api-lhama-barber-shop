@@ -18,13 +18,11 @@ import java.util.*;
 @org.springframework.stereotype.Service
 public class ScheduleService {
     @Autowired
+    private UserRepository  userRepository;
+    @Autowired
     private ScheduleRepository scheduleRepository;
     @Autowired
-    private ClientRepository clientRepository;
-    @Autowired
     private ServiceRepository serviceRepository;
-    @Autowired
-    private BarberRepository barberRepository;
     @Autowired
     private BarberUnavailableTimeRepository barberUnavailableTimeRepository;
     @Autowired
@@ -32,10 +30,10 @@ public class ScheduleService {
     @Autowired
     ScheduleValidations scheduleValidator;
 
-    public List<ScheduleDTO> findAllFutureSchedulesNotCanceledByIdBarber(Long idBarber){
+    public List<ScheduleDTO> findAllFutureSchedulesNotCanceledByIdBarber(Long idUserBarber){
 
         //Id schedule status 5 = canceled
-        List<Schedule> scheduleList = scheduleRepository.findAllByBarberIdBarberAndStartAfterAndIdScheduleStatusNot(idBarber, LocalDateTime.now(), 5);
+        List<Schedule> scheduleList = scheduleRepository.findAllByBarberIdUserAndStartAfterAndIdScheduleStatusNot(idUserBarber, LocalDateTime.now(), 5);
 
         return scheduleList.stream().map(ScheduleDTO::new).toList();
 
@@ -45,7 +43,7 @@ public class ScheduleService {
     public Long registerSchedule(ScheduleRegisterDTO scheduleRegisterData){
 
         //Validate idClient
-        if(!clientRepository.existsById(scheduleRegisterData.idClient())){
+        if(!userRepository.existsById(scheduleRegisterData.idClient())){
             throw new IdValidationException("Id do cliente não encontrado");
         }
 
@@ -55,7 +53,7 @@ public class ScheduleService {
         }
 
         //Validate idBarber
-        if(scheduleRegisterData.idBarber()!= null && !barberRepository.existsById(scheduleRegisterData.idBarber())){
+        if(scheduleRegisterData.idBarber()!= null && !userRepository.existsById(scheduleRegisterData.idBarber())){
             throw new IdValidationException("Id do barbeiro não encontrado");
         }
 
@@ -63,8 +61,8 @@ public class ScheduleService {
         scheduleValidator.businessHoursValidation(scheduleRegisterData);
 
 
-        Client client = clientRepository.findById(scheduleRegisterData.idClient()).get();
-        Barber barber = chooseBarber(scheduleRegisterData);
+        User client = userRepository.findById(scheduleRegisterData.idClient()).get();
+        User barber = chooseBarber(scheduleRegisterData);
         Service service = serviceRepository.findById(scheduleRegisterData.idService()).get();
         Schedule schedule = new Schedule(scheduleRegisterData, client, barber, service);
 
@@ -73,14 +71,14 @@ public class ScheduleService {
         return schedule.getIdSchedule();
     }
 
-    private Barber chooseBarber(ScheduleRegisterDTO scheduleRegisterData){
+    private User chooseBarber(ScheduleRegisterDTO scheduleRegisterData){
 
         //If idBarber is informed, choose barber by id
         if(scheduleRegisterData.idBarber() != null ){
 
             if(barberValidator.validateBarberById(scheduleRegisterData)){
 
-                return barberRepository.findById(scheduleRegisterData.idBarber()).get();
+                return userRepository.findById(scheduleRegisterData.idBarber()).get();
 
             }else{
                 throw new ValidationException("Esse barbeiro está indisponível para essa data");
@@ -88,24 +86,24 @@ public class ScheduleService {
         }
 
         //If idBarber is not informed choose random barber
-        List<Barber> availableBarberList = findAvailableBarbers(scheduleRegisterData);
+        List<User> availableBarberList = findAvailableBarbers(scheduleRegisterData);
 
         return RandomPicker.getRandomElementFromCollection(availableBarberList);
     }
 
-    public List<Barber> findAvailableBarbers(ScheduleRegisterDTO scheduleRegisterData){
+    public List<User> findAvailableBarbers(ScheduleRegisterDTO scheduleRegisterData){
 
-        List<Barber> allBarbers = barberRepository.findAllByActiveTrue();
-        List<Barber> availableBarberList = new ArrayList<>();
+        List<User> allBarbers = userRepository.findAllByActiveTrueAndRole(UserRole.BARBER);
+        List<User> availableBarberList = new ArrayList<>();
 
 
         //Check wich barber is available
-        for(Barber B: allBarbers){
+        for(User U: allBarbers){
 
             boolean barberUnavailableTime = false;
             boolean barberSchedule = false;
 
-            List<BarberUnavailableTime> barberUnavailableTimeList = barberUnavailableTimeRepository.findAllByBarberIdBarberAndActiveTrueAndStartAfter(B.getIdBarber(), LocalDateTime.now());
+            List<BarberUnavailableTime> barberUnavailableTimeList = barberUnavailableTimeRepository.findAllByBarberIdUserAndActiveTrueAndStartAfter(U.getIdUser(), LocalDateTime.now());
 
             //If barber has no unavailable time, availableBarber = true
             if(barberUnavailableTimeList.isEmpty()) {
@@ -128,7 +126,7 @@ public class ScheduleService {
 
             }
 
-            List<Schedule> futureSchedulesList = scheduleRepository.findAllByBarberIdBarberAndStartAfterAndIdScheduleStatusNot(B.getIdBarber(), LocalDateTime.now(), 5);
+            List<Schedule> futureSchedulesList = scheduleRepository.findAllByBarberIdUserAndStartAfterAndIdScheduleStatusNot(U.getIdUser(), LocalDateTime.now(), 5);
 
             //if barber has no future schedules, availableBarber = true. Id schedule status 5 = canceled
             if(futureSchedulesList.isEmpty()) {
@@ -152,7 +150,7 @@ public class ScheduleService {
 
             if(barberUnavailableTime == true && barberSchedule == true){
 
-                availableBarberList.add(B);
+                availableBarberList.add(U);
 
             }
 

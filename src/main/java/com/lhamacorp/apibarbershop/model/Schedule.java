@@ -16,10 +16,10 @@ public class Schedule {
     private LocalDateTime finish;
     @ManyToOne
     @JoinColumn(name = "idClient")
-    private Client client;
+    private User client;
     @ManyToOne
     @JoinColumn(name = "idBarber")
-    private Barber barber;
+    private User barber;
     @ManyToOne
     @JoinColumn(name = "idService")
     private Service service;
@@ -30,7 +30,7 @@ public class Schedule {
     public Schedule() {
     }
 
-    public Schedule(Long idSchedule, LocalDateTime start, LocalDateTime finish, Client client, Barber barber, Service service, Integer idScheduleStatus) {
+    public Schedule(Long idSchedule, LocalDateTime start, LocalDateTime finish, User client, User barber, Service service, Integer idScheduleStatus) {
         this.idSchedule = idSchedule;
         this.start = start;
         this.finish = finish;
@@ -40,7 +40,7 @@ public class Schedule {
         this.idScheduleStatus = idScheduleStatus;
     }
 
-    public Schedule(Long idSchedule, LocalDateTime start, LocalDateTime finish, Client client, Barber barber, Service service) {
+    public Schedule(Long idSchedule, LocalDateTime start, LocalDateTime finish, User client, User barber, Service service) {
         this.idSchedule = idSchedule;
         this.start = start;
         this.finish = finish;
@@ -50,7 +50,7 @@ public class Schedule {
         this.idScheduleStatus = 1;
     }
 
-    public Schedule(ScheduleRegisterDTO scheduleRegisterDTO, Client client, Barber barber, Service service){
+    public Schedule(ScheduleRegisterDTO scheduleRegisterDTO, User client, User barber, Service service){
         this.start = scheduleRegisterDTO.start();
         this.finish = scheduleRegisterDTO.start().plusMinutes(service.getDuration());
         this.client = client;
@@ -83,19 +83,19 @@ public class Schedule {
         this.finish = finish;
     }
 
-    public Client getClient() {
+    public User getClient() {
         return client;
     }
 
-    public void setClient(Client client) {
+    public void setClient(User client) {
         this.client = client;
     }
 
-    public Barber getBarber() {
+    public User getBarber() {
         return barber;
     }
 
-    public void setBarber(Barber barber) {
+    public void setBarber(User barber) {
         this.barber = barber;
     }
 

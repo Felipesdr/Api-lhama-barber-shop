@@ -1,7 +1,7 @@
 package com.lhamacorp.apibarbershop.model;
 
-import com.lhamacorp.apibarbershop.model.DTOs.BarberDTOs.BarberDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.BarberUnavailableTimeDTOs.BarberUnavailableTimeRegisterDTO;
+import com.lhamacorp.apibarbershop.model.DTOs.Users.UserDTO;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -19,12 +19,12 @@ public class BarberUnavailableTime {
     private LocalDateTime finish;
     @ManyToOne
     @JoinColumn(name = "idBarber", nullable = false)
-    private Barber barber;
+    private User barber;
     private boolean active;
     public BarberUnavailableTime() {
     }
 
-    public BarberUnavailableTime(Long idBarberUnavailableTime, String description, LocalDateTime start, LocalDateTime end, Barber barber) {
+    public BarberUnavailableTime(Long idBarberUnavailableTime, String description, LocalDateTime start, LocalDateTime end, User barber) {
         this.idBarberUnavailableTime = idBarberUnavailableTime;
         this.description = description;
         this.start = start;
@@ -33,11 +33,11 @@ public class BarberUnavailableTime {
         this.active = true;
     }
 
-    public BarberUnavailableTime(BarberUnavailableTimeRegisterDTO barberUnavailableTimeRegisterDTO, BarberDTO barberDTO){
+    public BarberUnavailableTime(BarberUnavailableTimeRegisterDTO barberUnavailableTimeRegisterDTO, User user){
         this.description = barberUnavailableTimeRegisterDTO.description();
         this.start = barberUnavailableTimeRegisterDTO.start();
         this.finish = barberUnavailableTimeRegisterDTO.end();
-        this.barber = new Barber(barberDTO);
+        this.barber = user;
         this.active = true;
     }
 
@@ -73,11 +73,11 @@ public class BarberUnavailableTime {
         this.finish = finish;
     }
 
-    public Barber getBarber() {
+    public User getUser() {
         return barber;
     }
 
-    public void setBarber(Barber barber) {
+    public void setUser(User user) {
         this.barber = barber;
     }
 

@@ -1,16 +1,15 @@
 package com.lhamacorp.apibarbershop.service;
 
 import com.lhamacorp.apibarbershop.model.BarberUnavailableTime;
-import com.lhamacorp.apibarbershop.model.DTOs.BarberDTOs.BarberDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.BarberUnavailableTimeDTOs.BarberUnavailableTimeDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.BarberUnavailableTimeDTOs.BarberUnavailableTimeRegisterDTO;
-import com.lhamacorp.apibarbershop.repository.BarberRepository;
+import com.lhamacorp.apibarbershop.model.DTOs.Users.UserDTO;
+import com.lhamacorp.apibarbershop.model.User;
 import com.lhamacorp.apibarbershop.repository.BarberUnavailableTimeRepository;
+import com.lhamacorp.apibarbershop.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,23 +19,21 @@ public class BarberUnavaibleTimeService {
     @Autowired
     private BarberUnavailableTimeRepository repository;
     @Autowired
-    private BarberRepository barberRepository;
-    public URI registerBarberUnavaibleTime(BarberUnavailableTimeRegisterDTO unavaibleTimeData, UriComponentsBuilder uriBuilder){
+    private UserRepository userRepository;
+    public Long registerBarberUnavaibleTime(BarberUnavailableTimeRegisterDTO unavaibleTimeData){
 
-        BarberDTO barberDTO = new BarberDTO(barberRepository.findById(unavaibleTimeData.idBarber()).get());
+        UserDTO userDTO = new UserDTO(userRepository.findById(unavaibleTimeData.idBarber()).get());
 
-        BarberUnavailableTime barberUnavaibleTime = new BarberUnavailableTime(unavaibleTimeData,barberDTO);
+        User barber = new User(userDTO);
 
-        repository.save(barberUnavaibleTime);
+        BarberUnavailableTime barberUnavaibleTime = new BarberUnavailableTime(unavaibleTimeData, barber);
 
-        URI uri = uriBuilder.path("/barberUnavaibleTime/{id}").buildAndExpand(barberUnavaibleTime.getIdBarberUnavailableTime()).toUri();
-
-        return uri;
+        return repository.save(barberUnavaibleTime).getIdBarberUnavailableTime();
     }
 
     public List<BarberUnavailableTimeDTO> findAllFutureBarberUnavailableTimeByIdBarberAndActiveTrue(Long idBarber){
 
-        List<BarberUnavailableTime> barberUnavailableTimeList = repository.findAllByBarberIdBarberAndActiveTrueAndStartAfter(idBarber, LocalDateTime.now());
+        List<BarberUnavailableTime> barberUnavailableTimeList = repository.findAllByBarberIdUserAndActiveTrueAndStartAfter(idBarber, LocalDateTime.now());
 
         return barberUnavailableTimeList.stream().map(BarberUnavailableTimeDTO::new).collect(Collectors.toList());
     }

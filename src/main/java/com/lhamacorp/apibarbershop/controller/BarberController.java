@@ -1,9 +1,10 @@
 package com.lhamacorp.apibarbershop.controller;
 
-import com.lhamacorp.apibarbershop.model.DTOs.BarberDTOs.BarberDTO;
-import com.lhamacorp.apibarbershop.model.DTOs.BarberDTOs.BarberRegisterDTO;
-import com.lhamacorp.apibarbershop.model.DTOs.BarberDTOs.BarberUpdateDTO;
-import com.lhamacorp.apibarbershop.service.BarberService;
+import com.lhamacorp.apibarbershop.model.DTOs.Users.UserDTO;
+import com.lhamacorp.apibarbershop.model.DTOs.Users.UserRegisterDTO;
+import com.lhamacorp.apibarbershop.model.DTOs.Users.UserUpdateDTO;
+import com.lhamacorp.apibarbershop.model.UserRole;
+import com.lhamacorp.apibarbershop.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,29 +17,33 @@ import java.util.List;
 @RestController
 @RequestMapping("/barber")
 public class BarberController {
+
     @Autowired
-    private BarberService barberService;
+    private UserService userService;
 
     @GetMapping("/barbers")
-    public ResponseEntity<List<BarberDTO>> getAllActiveBarbers(){
+    public ResponseEntity<List<UserDTO>> getAllActiveBarbers(){
 
-        List<BarberDTO> list = barberService.findAllBarbersByActiveTrue();
+        List<UserDTO> list = userService.findAllUsersByActiveTrueAndRole(UserRole.BARBER);
         return ResponseEntity.ok(list);
     }
+
     @PostMapping("/register")
     @Transactional
-    public ResponseEntity registerBarber(@RequestBody BarberRegisterDTO request, UriComponentsBuilder uriBuilder){
+    public ResponseEntity registerBarber(@RequestBody UserRegisterDTO request, UriComponentsBuilder uriBuilder){
 
-        URI uri = barberService.registerBarber(request, uriBuilder);
+        Long barberId = userService.registerUserBarber(request);
+
+        URI uri = uriBuilder.path("/barber/register/{id}").buildAndExpand(barberId).toUri();
 
         return ResponseEntity.created(uri).build();
     }
 
     @PutMapping("/update")
     @Transactional
-    public ResponseEntity updateBarber(@RequestBody BarberUpdateDTO request){
+    public ResponseEntity updateBarber(@RequestBody UserUpdateDTO request){
 
-        BarberUpdateDTO barberUpdateDTO = barberService.updateBarber(request);
+        UserUpdateDTO barberUpdateDTO = userService.updateBarberOrClientById(request);
 
         return ResponseEntity.ok(barberUpdateDTO);
     }
@@ -47,7 +52,7 @@ public class BarberController {
     @Transactional
     public ResponseEntity deleteBarber(@PathVariable Long id){
 
-        barberService.deleteBarber(id);
+        userService.deleteBarberOrClient(id);
 
         return ResponseEntity.noContent().build();
     }

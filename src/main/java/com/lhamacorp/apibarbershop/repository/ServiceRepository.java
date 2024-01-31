@@ -1,6 +1,5 @@
 package com.lhamacorp.apibarbershop.repository;
 
-import com.lhamacorp.apibarbershop.model.DTOs.ClientDTOs.ClientDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.serviceDTOs.ServiceDTO;
 import com.lhamacorp.apibarbershop.model.Service;
 import org.springframework.data.jpa.repository.JpaRepository;

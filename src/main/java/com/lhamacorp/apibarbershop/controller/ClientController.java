@@ -1,9 +1,10 @@
 package com.lhamacorp.apibarbershop.controller;
 
-import com.lhamacorp.apibarbershop.model.DTOs.ClientDTOs.ClientDTO;
-import com.lhamacorp.apibarbershop.model.DTOs.ClientDTOs.ClientRegisterDTO;
-import com.lhamacorp.apibarbershop.model.DTOs.ClientDTOs.ClientUpdateDTO;
-import com.lhamacorp.apibarbershop.service.ClientService;
+import com.lhamacorp.apibarbershop.model.DTOs.Users.UserDTO;
+import com.lhamacorp.apibarbershop.model.DTOs.Users.UserRegisterDTO;
+import com.lhamacorp.apibarbershop.model.DTOs.Users.UserUpdateDTO;
+import com.lhamacorp.apibarbershop.model.UserRole;
+import com.lhamacorp.apibarbershop.service.UserService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,19 +19,26 @@ import java.util.List;
 @RequestMapping("client")
 public class ClientController {
     @Autowired
-    private ClientService clientService;
+    private UserService userService;
 
     @GetMapping("/clients")
-    public ResponseEntity<List<ClientDTO>> getAllActiveCliets(){
+    public ResponseEntity<List<UserDTO>> getAllActiveCliets(){
 
-        return ResponseEntity.ok(clientService.getAllClients());
+        return ResponseEntity.ok(userService.findAllUsersByActiveTrueAndRole(UserRole.CLIENT));
     }
 
     @PostMapping("/register")
     @Transactional
-    public ResponseEntity registerClient (@RequestBody @Valid ClientRegisterDTO request, UriComponentsBuilder uriBuilder){
+    public ResponseEntity registerClient (@RequestBody @Valid UserRegisterDTO request, UriComponentsBuilder uriBuilder){
 
-        URI uri = clientService.registerClient(request, uriBuilder);
+        Long idClient =  userService.registerUserClient(request);
+
+        if(idClient == null){
+
+            return ResponseEntity.badRequest().build();
+        }
+
+        URI uri = uriBuilder.path("client/register/{id}").buildAndExpand(idClient).toUri();
 
         return ResponseEntity.created(uri).build();
     }
@@ -39,18 +47,17 @@ public class ClientController {
     @Transactional
     public ResponseEntity deleteClient(@PathVariable Long id){
 
-        clientService.deleteClient(id);
+        userService.deleteBarberOrClient(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/update")
     @Transactional
-    public ResponseEntity updateClientById(@RequestBody @Valid ClientUpdateDTO request){
+    public ResponseEntity updateClientById(@RequestBody @Valid UserUpdateDTO request){
 
-        ClientUpdateDTO client = clientService.updateClientById(request);
+        UserUpdateDTO client = userService.updateBarberOrClientById(request);
 
         return ResponseEntity.ok(client);
     }
-
 
 }

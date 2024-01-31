@@ -1,6 +1,6 @@
 package com.lhamacorp.apibarbershop.controller;
 
-import com.lhamacorp.apibarbershop.model.DTOs.UserRegisterDTO;
+import com.lhamacorp.apibarbershop.model.DTOs.Users.UserRegisterDTO;
 import com.lhamacorp.apibarbershop.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
 
-        URI uri = uriBuilder.path("register/{id}").buildAndExpand(userService.registerUserClient(userRegisterData)).toUri();
+        URI uri = uriBuilder.path("register/client/{id}").buildAndExpand(userService.registerUserClient(userRegisterData)).toUri();
 
         return ResponseEntity.created(uri).build();
     }
