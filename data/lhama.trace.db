@@ -14265,3 +14265,5 @@ org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE T
 CREATE TABLE IF NOT EXISTS schedule ( id_schedule INT PRIMARY KEY AUTO_INCREMENT, id_client INT NOT NULL, id_service INT NOT NULL, id_barber INT NOT NULL, start TIMESTAMP NOT NULL, finish TIMESTAMP NOT NULL, id_schedule_status INT DEFAULT 1, FOREIGN KEY (id_client) REFERENCES user(id_user), FOREIGN KEY (id_service) REFERENCES service(id_service), FOREIGN KEY (id_barber) REFERENCES barber(id_user), FOREIGN KEY (id_schedule_status) REFERENCES schedule_status(id_schedule_status) ) [42001-224]
 2024-01-30 14:49:42.191461-03:00 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2024-02-06 13:19:25.875009-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]

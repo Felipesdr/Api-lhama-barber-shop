@@ -24,6 +24,7 @@ public class TokenService {
                     .withIssuer("Lhama barber shop")
                     .withSubject(user.getEmail())
                     .withExpiresAt(expirationDate())
+                    .withClaim("User id",  user.getIdUser())
                     .sign(algorithm);
 
             return token;
