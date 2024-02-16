@@ -87,7 +87,6 @@ public class UserService {
 
         User user = userRepository.getReferenceById(userData.idUser());
 
-
         if (userData.name() != null) {
 
             user.setName(userData.name());

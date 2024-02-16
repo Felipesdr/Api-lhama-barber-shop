@@ -34,6 +34,7 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/user/register/client").permitAll()
                         .requestMatchers(HttpMethod.POST, "/user/register/barber").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/user/update").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/barber/update").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE,"/barber/delete" ).hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST,"/barberUnavailableTime/register").hasRole("BARBER")

@@ -33,7 +33,6 @@ public class UserController {
 
         return ResponseEntity.created(uri).build();
 
-
     }
 
     @PostMapping("/register/barber")
@@ -57,11 +56,20 @@ public class UserController {
         UserUpdateDTO userUpdated = userService.updateUserOwnAccount(userUpdateData, header);
 
         if(userUpdated == null){
-            System.out.println("Aqui");
             return ResponseEntity.badRequest().build();
         }
 
         return ResponseEntity.ok(userUpdated);
 
     }
+
+    @PutMapping("/update")
+    @Transactional
+    public ResponseEntity updateUser(@RequestBody UserUpdateDTO userUpdateData){
+
+        UserUpdateDTO userUpdated = userService.updateUser(userUpdateData);
+
+        return ResponseEntity.ok(userUpdated);
+    }
+
 }
