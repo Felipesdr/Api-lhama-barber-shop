@@ -55,7 +55,7 @@ public class ClientController {
     @Transactional
     public ResponseEntity updateClientById(@RequestBody @Valid UserUpdateDTO request){
 
-        UserUpdateDTO client = userService.updateBarberOrClientById(request);
+        UserUpdateDTO client = userService.updateUser(request);
 
         return ResponseEntity.ok(client);
     }

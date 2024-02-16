@@ -26,35 +26,8 @@ public class BarberController {
 
         List<UserDTO> list = userService.findAllUsersByActiveTrueAndRole(UserRole.BARBER);
         return ResponseEntity.ok(list);
+
     }
 
-    @PostMapping("/register")
-    @Transactional
-    public ResponseEntity registerBarber(@RequestBody UserRegisterDTO request, UriComponentsBuilder uriBuilder){
-
-        Long barberId = userService.registerUserBarber(request);
-
-        URI uri = uriBuilder.path("/barber/register/{id}").buildAndExpand(barberId).toUri();
-
-        return ResponseEntity.created(uri).build();
-    }
-
-    @PutMapping("/update")
-    @Transactional
-    public ResponseEntity updateBarber(@RequestBody UserUpdateDTO request){
-
-        UserUpdateDTO barberUpdateDTO = userService.updateBarberOrClientById(request);
-
-        return ResponseEntity.ok(barberUpdateDTO);
-    }
-
-    @DeleteMapping("/delete/{id}")
-    @Transactional
-    public ResponseEntity deleteBarber(@PathVariable Long id){
-
-        userService.deleteBarberOrClient(id);
-
-        return ResponseEntity.noContent().build();
-    }
 
 }

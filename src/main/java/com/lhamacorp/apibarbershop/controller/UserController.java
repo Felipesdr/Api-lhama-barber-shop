@@ -1,14 +1,13 @@
 package com.lhamacorp.apibarbershop.controller;
 
 import com.lhamacorp.apibarbershop.model.DTOs.Users.UserRegisterDTO;
+import com.lhamacorp.apibarbershop.model.DTOs.Users.UserUpdateDTO;
 import com.lhamacorp.apibarbershop.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
@@ -26,6 +25,7 @@ public class UserController {
         if(userService.registerUserClient(userRegisterData) == null){
 
             return ResponseEntity.badRequest().build();
+
         }
 
         URI uri = uriBuilder.path("register/client/{id}").buildAndExpand(userService.registerUserClient(userRegisterData)).toUri();
@@ -37,7 +37,7 @@ public class UserController {
     @Transactional
     public ResponseEntity registerUserBarber(@RequestBody UserRegisterDTO userRegisterData, UriComponentsBuilder uriBuilder){
 
-        if(userService.registerUserClient(userRegisterData) == null){
+        if(userService.registerUserBarber(userRegisterData) == null){
 
             return ResponseEntity.badRequest().build();
         }
@@ -45,5 +45,20 @@ public class UserController {
         URI uri = uriBuilder.path("register/{id}").buildAndExpand(userService.registerUserBarber(userRegisterData)).toUri();
 
         return ResponseEntity.created(uri).build();
+    }
+
+    @PutMapping("/update/account")
+    @Transactional
+    public ResponseEntity updateUserAccountData(@RequestBody UserUpdateDTO userUpdateData, @RequestHeader HttpHeaders header){
+
+        UserUpdateDTO userUpdated = userService.updateUserOwnAccount(userUpdateData, header);
+
+        if(userUpdated == null){
+            System.out.println("Aqui");
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(userUpdated);
+
     }
 }

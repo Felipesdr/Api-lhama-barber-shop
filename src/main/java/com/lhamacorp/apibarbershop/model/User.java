@@ -2,6 +2,7 @@ package com.lhamacorp.apibarbershop.model;
 
 import com.lhamacorp.apibarbershop.model.DTOs.Users.UserDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.Users.UserRegisterDTO;
+import com.lhamacorp.apibarbershop.model.DTOs.Users.UserUpdateDTO;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -52,7 +53,13 @@ public class User implements UserDetails {
         this.idUser = userDTO.idUser();
         this.name = userDTO.name();
         this.email = userDTO.email();
+    }
 
+    public User(UserUpdateDTO userUpdateDTO){
+        this.idUser = userUpdateDTO.idUser();
+        this.name = userUpdateDTO.name();
+        this.email = userUpdateDTO.email();
+        this.password = userUpdateDTO.password();
     }
 
     public Long getIdUser() {
