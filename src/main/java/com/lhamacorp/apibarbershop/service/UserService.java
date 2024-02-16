@@ -132,7 +132,16 @@ public class UserService {
 
     public void deleteBarberOrClient(Long idUser) {
 
-        User barber = userRepository.getReferenceById(idUser);
-        barber.setActive(false);
+        User user = userRepository.getReferenceById(idUser);
+
+        if(user.getRole() != UserRole.ADMIN){
+
+            user.setActive(false);
+
+        }else {
+
+            throw new RuntimeException("Não é permitido deletar usuário administrador");
+
+        }
     }
 }

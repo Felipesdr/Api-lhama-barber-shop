@@ -72,4 +72,13 @@ public class UserController {
         return ResponseEntity.ok(userUpdated);
     }
 
+    @DeleteMapping("delete/{idUser}")
+    @Transactional
+    public ResponseEntity deleteBarberOrClient(@PathVariable Long idUser){
+
+        userService.deleteBarberOrClient(idUser);
+
+        return ResponseEntity.noContent().build();
+    }
+
 }
