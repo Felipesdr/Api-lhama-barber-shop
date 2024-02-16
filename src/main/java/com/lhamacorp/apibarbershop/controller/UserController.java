@@ -24,6 +24,7 @@ public class UserController {
 
         if(userService.registerUserClient(userRegisterData) == null){
 
+            System.out.printf("============================== caiu aqui babaca =================================");
             return ResponseEntity.badRequest().build();
 
         }
@@ -31,6 +32,8 @@ public class UserController {
         URI uri = uriBuilder.path("register/client/{id}").buildAndExpand(userService.registerUserClient(userRegisterData)).toUri();
 
         return ResponseEntity.created(uri).build();
+
+
     }
 
     @PostMapping("/register/barber")
