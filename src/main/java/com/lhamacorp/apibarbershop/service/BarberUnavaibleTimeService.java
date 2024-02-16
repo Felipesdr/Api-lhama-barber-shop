@@ -27,13 +27,13 @@ public class BarberUnavaibleTimeService {
     private TokenService tokenService;
     public Long registerBarberUnavaibleTime(BarberUnavailableTimeRegisterDTO unavaibleTimeData, HttpHeaders headers){
 
-        Long idUser = tokenService.getIdFromToken(headers);
+        Long idRequestingUser = tokenService.getIdFromToken(headers);
 
-        User requestingUser = userRepository.getReferenceById(idUser);
+        User requestingUser = userRepository.getReferenceById(idRequestingUser);
 
         User barber = userRepository.getReferenceById(unavaibleTimeData.idBarber());
 
-        userIdValidationForNonAdmin(idUser, barber.getIdUser(), requestingUser);
+        userIdValidationForNonAdmin(idRequestingUser, barber.getIdUser(), requestingUser);
 
         isBarberValidation(barber);
 
@@ -48,13 +48,13 @@ public class BarberUnavaibleTimeService {
 
     public List<BarberUnavailableTimeDTO> findAllFutureBarberUnavailableTimeByIdBarberAndActiveTrue(Long idBarber, HttpHeaders headers){
 
-        Long idUser = tokenService.getIdFromToken(headers);
+        Long idRequestingUser = tokenService.getIdFromToken(headers);
 
-        User requestingUser = userRepository.getReferenceById(idUser);
+        User requestingUser = userRepository.getReferenceById(idRequestingUser);
 
         User barber = userRepository.getReferenceById(idBarber);
 
-        userIdValidationForNonAdmin(idBarber, idUser, requestingUser);
+        userIdValidationForNonAdmin(idBarber, idRequestingUser, requestingUser);
 
         isBarberValidation(barber);
 
@@ -63,7 +63,19 @@ public class BarberUnavaibleTimeService {
         return barberUnavailableTimeList.stream().map(BarberUnavailableTimeDTO::new).collect(Collectors.toList());
     }
 
-    public BarberUnavailableTimeDTO updateBarberUnavailableTime(BarberUnavailableTimeDTO updateData){
+    public BarberUnavailableTimeDTO updateBarberUnavailableTime(BarberUnavailableTimeDTO updateData, HttpHeaders headers){
+
+        Long idRequestingUser = tokenService.getIdFromToken(headers);
+
+        User requestingUser = userRepository.getReferenceById(idRequestingUser);
+
+        Long idBarber = updateData.idBarber();
+
+        System.out.println("Id do usuario da requisição: " + idRequestingUser);
+        System.out.println("Role do usuario da requisição:  " + requestingUser.getRole());
+        System.out.println("Id do barbeiro indisponivel: " + idBarber);
+
+        userIdValidationForNonAdmin(idRequestingUser, idBarber, requestingUser);
 
         BarberUnavailableTime update = barberUnavailableTimeRepository.getReferenceById(updateData.idBarberUnavailableTime());
 

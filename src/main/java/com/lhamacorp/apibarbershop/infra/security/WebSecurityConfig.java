@@ -40,6 +40,7 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.DELETE,"/barber/delete" ).hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST,"/barberUnavailableTime/register").hasRole("BARBER")
                         .requestMatchers(HttpMethod.POST,"/barberUnavailableTime/**").hasRole("BARBER")
+                        .requestMatchers(HttpMethod.POST,"/barberUnavailableTime/update").hasRole("BARBER")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFIlter, UsernamePasswordAuthenticationFilter.class)

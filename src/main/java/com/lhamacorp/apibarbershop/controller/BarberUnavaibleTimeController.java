@@ -41,9 +41,9 @@ public class BarberUnavaibleTimeController {
 
    @PutMapping("update")
    @Transactional
-   public ResponseEntity updateBarberUnavailableTimeById(@RequestBody BarberUnavailableTimeDTO request){
+   public ResponseEntity updateBarberUnavailableTimeById(@RequestBody BarberUnavailableTimeDTO request, @RequestHeader HttpHeaders headers){
 
-       BarberUnavailableTimeDTO updatedBarberUnavailableTime = service.updateBarberUnavailableTime(request);
+       BarberUnavailableTimeDTO updatedBarberUnavailableTime = service.updateBarberUnavailableTime(request, headers);
 
        return ResponseEntity.ok(updatedBarberUnavailableTime);
    }
