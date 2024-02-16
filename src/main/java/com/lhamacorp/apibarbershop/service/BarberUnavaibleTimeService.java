@@ -27,21 +27,15 @@ public class BarberUnavaibleTimeService {
     private TokenService tokenService;
     public Long registerBarberUnavaibleTime(BarberUnavailableTimeRegisterDTO unavaibleTimeData, HttpHeaders headers){
 
-        Long userId = tokenService.getIdFromToken(headers);
+        Long idUser = tokenService.getIdFromToken(headers);
 
-        User user = userRepository.getReferenceById(userId);
+        User requestingUser = userRepository.getReferenceById(idUser);
 
         User barber = userRepository.getReferenceById(unavaibleTimeData.idBarber());
 
-        if(user.getRole() != UserRole.ADMIN && !userId.equals(unavaibleTimeData.idBarber())){
+        userIdValidationForNonAdmin(idUser, barber.getIdUser(), requestingUser);
 
-            throw new RuntimeException ("Você não pode fazer isso!");
-        }
-
-        if(barber.getRole() != UserRole.BARBER){
-
-            throw new RuntimeException("Você não pode fazer isso!");
-        }
+        isBarberValidation(barber);
 
         UserDTO userDTO = new UserDTO(userRepository.findById(unavaibleTimeData.idBarber()).get());
 
@@ -52,7 +46,17 @@ public class BarberUnavaibleTimeService {
         return barberUnavailableTimeRepository.save(barberUnavaibleTime).getIdBarberUnavailableTime();
     }
 
-    public List<BarberUnavailableTimeDTO> findAllFutureBarberUnavailableTimeByIdBarberAndActiveTrue(Long idBarber){
+    public List<BarberUnavailableTimeDTO> findAllFutureBarberUnavailableTimeByIdBarberAndActiveTrue(Long idBarber, HttpHeaders headers){
+
+        Long idUser = tokenService.getIdFromToken(headers);
+
+        User requestingUser = userRepository.getReferenceById(idUser);
+
+        User barber = userRepository.getReferenceById(idBarber);
+
+        userIdValidationForNonAdmin(idBarber, idUser, requestingUser);
+
+        isBarberValidation(barber);
 
         List<BarberUnavailableTime> barberUnavailableTimeList = barberUnavailableTimeRepository.findAllByBarberIdUserAndActiveTrueAndStartAfter(idBarber, LocalDateTime.now());
 
@@ -85,6 +89,24 @@ public class BarberUnavaibleTimeService {
         barberUnavailableTime.setActive(false);
 
         barberUnavailableTimeRepository.save(barberUnavailableTime);
+    }
+
+    private void userIdValidationForNonAdmin(Long idUser, Long idParameter, User requestingUser){
+
+        if(requestingUser.getRole() != UserRole.ADMIN && idUser != idParameter){
+
+            throw new RuntimeException("Você não pode fazer isso!");
+
+        }
+
+    }
+
+    private void isBarberValidation(User user){
+
+        if(user.getRole() != UserRole.BARBER){
+
+            throw new RuntimeException("Usuario fornecido não é um barbeiro cadastrado");
+        }
     }
 
 }

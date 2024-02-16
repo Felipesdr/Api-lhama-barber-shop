@@ -32,9 +32,9 @@ public class BarberUnavaibleTimeController {
    }
 
    @GetMapping("/{idBarber}")
-   public ResponseEntity findAllBarberUnavailableTimeByIdBarberAndActiveTrue(@PathVariable Long idBarber){
+   public ResponseEntity findAllBarberUnavailableTimeByIdBarberAndActiveTrue(@PathVariable Long idBarber, @RequestHeader HttpHeaders headers){
 
-       List<BarberUnavailableTimeDTO> list = service.findAllFutureBarberUnavailableTimeByIdBarberAndActiveTrue(idBarber);
+       List<BarberUnavailableTimeDTO> list = service.findAllFutureBarberUnavailableTimeByIdBarberAndActiveTrue(idBarber, headers);
 
        return ResponseEntity.ok(list);
    }
