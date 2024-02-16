@@ -67,7 +67,6 @@ public class TokenService {
         String token = header.get("Authorization").get(0);
         String jwt = token.replace("Bearer ", "");
 
-        System.out.println(jwt);
 
         Algorithm algorithm = Algorithm.HMAC256(secret);
 

@@ -6,6 +6,7 @@ import com.lhamacorp.apibarbershop.service.BarberUnavaibleTimeService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -21,9 +22,9 @@ public class BarberUnavaibleTimeController {
 
    @PostMapping("/register")
    @Transactional
-   public ResponseEntity registerBarberUnavaibleTime(@RequestBody @Valid BarberUnavailableTimeRegisterDTO request, UriComponentsBuilder uriBuilder){
+   public ResponseEntity registerBarberUnavaibleTime(@RequestBody @Valid BarberUnavailableTimeRegisterDTO request, UriComponentsBuilder uriBuilder, @RequestHeader HttpHeaders headers){
 
-       Long idBarberUnavailableTime = service.registerBarberUnavaibleTime(request);
+       Long idBarberUnavailableTime = service.registerBarberUnavaibleTime(request, headers);
 
        URI uri = uriBuilder.path("barberUnavailableTime/register/{id}").buildAndExpand(idBarberUnavailableTime).toUri();
 
