@@ -27,37 +27,10 @@ public class ClientController {
         return ResponseEntity.ok(userService.findAllUsersByActiveTrueAndRole(UserRole.CLIENT));
     }
 
-    @PostMapping("/register")
-    @Transactional
-    public ResponseEntity registerClient (@RequestBody @Valid UserRegisterDTO request, UriComponentsBuilder uriBuilder){
+    @GetMapping("/name/{name}")
+    public ResponseEntity findClientByName(@PathVariable String name){
 
-        Long idClient =  userService.registerUserClient(request);
+        return ResponseEntity.ok(userService.findUserByName(name, UserRole.CLIENT));
 
-        if(idClient == null){
-
-            return ResponseEntity.badRequest().build();
-        }
-
-        URI uri = uriBuilder.path("client/register/{id}").buildAndExpand(idClient).toUri();
-
-        return ResponseEntity.created(uri).build();
     }
-
-    @DeleteMapping("delete/{id}")
-    @Transactional
-    public ResponseEntity deleteClient(@PathVariable Long id){
-
-        userService.deleteBarberOrClient(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PutMapping("/update")
-    @Transactional
-    public ResponseEntity updateClientById(@RequestBody @Valid UserUpdateDTO request){
-
-        UserUpdateDTO client = userService.updateUser(request);
-
-        return ResponseEntity.ok(client);
-    }
-
 }

@@ -118,7 +118,16 @@ public class UserService {
 
     public UserDTO findUserById(Long idBarber) {
 
-        var user = userRepository.findById(idBarber).get();
+        User user = userRepository.findById(idBarber).get();
+
+        return new UserDTO(user);
+    }
+
+    public UserDTO findUserByName(String name, UserRole role){
+
+        User user = userRepository.findByNameAndRole(name, role);
+
+        System.out.println("USUARIO : " + user);
 
         return new UserDTO(user);
     }
