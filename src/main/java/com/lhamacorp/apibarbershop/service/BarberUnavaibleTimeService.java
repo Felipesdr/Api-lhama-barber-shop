@@ -94,7 +94,16 @@ public class BarberUnavaibleTimeService {
         return new BarberUnavailableTimeDTO(update);
     }
 
-    public void deleteBarberUnavailableTimeById(Long idBarberUnavailableTime){
+    public void deleteBarberUnavailableTimeById(Long idBarberUnavailableTime, HttpHeaders headers){
+
+        Long idRequestingUser = tokenService.getIdFromToken(headers);
+
+        User requestingUser = userRepository.getReferenceById(idRequestingUser);
+
+        BarberUnavailableTime but = barberUnavailableTimeRepository.getReferenceById(idBarberUnavailableTime);
+        Long idBarber = but.getUser().getIdUser();
+
+        userIdValidationForNonAdmin(idRequestingUser, idBarber, requestingUser);
 
         BarberUnavailableTime barberUnavailableTime = barberUnavailableTimeRepository.getReferenceById(idBarberUnavailableTime);
 

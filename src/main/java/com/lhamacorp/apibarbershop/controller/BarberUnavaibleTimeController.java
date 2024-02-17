@@ -50,9 +50,9 @@ public class BarberUnavaibleTimeController {
 
    @DeleteMapping("delete/{idBarberUnavailableTime}")
    @Transactional
-   public ResponseEntity deleBarberUnavailableTimeById(@PathVariable Long idBarberUnavailableTime){
+   public ResponseEntity deleBarberUnavailableTimeById(@PathVariable Long idBarberUnavailableTime, @RequestHeader HttpHeaders headers){
 
-       service.deleteBarberUnavailableTimeById(idBarberUnavailableTime);
+       service.deleteBarberUnavailableTimeById(idBarberUnavailableTime, headers);
 
        return ResponseEntity.noContent().build();
    }
