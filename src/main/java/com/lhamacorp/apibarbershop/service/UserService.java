@@ -127,7 +127,12 @@ public class UserService {
 
         User user = userRepository.findByNameAndRole(name, role);
 
-        System.out.println("USUARIO : " + user);
+        return new UserDTO(user);
+    }
+
+    public UserDTO findUserByEmail(String email, UserRole role){
+
+        User user = userRepository.findByEmailAndRole(email, role);
 
         return new UserDTO(user);
     }

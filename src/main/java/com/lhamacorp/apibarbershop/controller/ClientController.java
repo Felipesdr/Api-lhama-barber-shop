@@ -33,4 +33,11 @@ public class ClientController {
         return ResponseEntity.ok(userService.findUserByName(name, UserRole.CLIENT));
 
     }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity findClientByEmail(@PathVariable String email){
+
+        System.out.println(email);
+        return ResponseEntity.ok(userService.findUserByEmail(email, UserRole.CLIENT));
+    }
 }
