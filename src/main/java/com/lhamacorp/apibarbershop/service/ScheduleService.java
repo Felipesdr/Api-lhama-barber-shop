@@ -7,7 +7,7 @@ import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.ScheduleRegisterDTO;
 import com.lhamacorp.apibarbershop.model.ENUMs.ScheduleStatus;
 import com.lhamacorp.apibarbershop.model.ENUMs.UserRole;
 import com.lhamacorp.apibarbershop.model.validations.BarberValidation;
-import com.lhamacorp.apibarbershop.model.validations.ScheduleValidations;
+import com.lhamacorp.apibarbershop.model.validations.ScheduleValidation;
 import com.lhamacorp.apibarbershop.repository.*;
 import com.lhamacorp.apibarbershop.utilities.RandomPicker;
 import jakarta.validation.ValidationException;
@@ -31,7 +31,7 @@ public class ScheduleService {
     @Autowired
     BarberValidation barberValidator;
     @Autowired
-    ScheduleValidations scheduleValidator;
+    ScheduleValidation scheduleValidator;
 
     public List<ScheduleDTO> findAllFutureSchedulesNotCanceledByIdBarber(Long idUserBarber){
 
@@ -64,6 +64,9 @@ public class ScheduleService {
 
         //Validate business hours
         scheduleValidator.businessHoursValidation(scheduleRegisterData);
+
+        //Validate barber shop unavailable time
+        scheduleValidator.unavailableTimeValidation(scheduleRegisterData);
 
 
         User client = userRepository.findById(scheduleRegisterData.idClient()).get();
