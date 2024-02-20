@@ -49,10 +49,10 @@ INSERT INTO schedule(id_client, id_service, id_barber, start, finish, status)
 VALUES (2, 1, 2, '2024-03-03 09:00:00', '2024-03-03 09:45:00', 'CONFIRMED');
 
 INSERT INTO schedule(id_client, id_service, id_barber, start, finish, status)
-VALUES (1, 1, 3, '2024-05-05 09:00:00', '2023-05-05 09:45:00', 'CONFIRMED');
+VALUES (1, 1, 3, '2024-05-05 09:00:00', '2024-05-05 09:45:00', 'CONFIRMED');
 
 INSERT INTO schedule(id_client, id_service, id_barber, start, finish, status)
-VALUES (1, 1, 3, '2024-06-06 09:00:00', '2023-06-06 09:45:00', 'CONFIRMED');
+VALUES (1, 1, 3, '2024-06-06 09:00:00', '2024-06-06 09:45:00', 'CONFIRMED');
 
 INSERT INTO schedule(id_client, id_service, id_barber, start, finish, status)
-VALUES (1, 1, 3, '2024-07-07 09:00:00', '2023-07-07 09:45:00', 'CONFIRMED');
+VALUES (1, 1, 3, '2024-07-07 09:00:00', '2024-07-07 09:45:00', 'CONFIRMED');

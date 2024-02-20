@@ -58,11 +58,19 @@ public class ScheduleValidation {
 
     public void idClientValidation(ScheduleRegisterDTO scheduleRegisterDTO, HttpHeaders headers){
 
+        Long schedulingUserId = scheduleRegisterDTO.idClient();
+
+        idClientValidation(schedulingUserId, headers);
+
+    }
+
+    public void idClientValidation(Long idClient, HttpHeaders headers){
+
         Long userRequestingId = tokenService.getIdFromToken(headers);
 
         User requestingUser = userRepository.getReferenceById(userRequestingId);
 
-        Long schedulingUserId = scheduleRegisterDTO.idClient();
+        Long schedulingUserId = idClient;
 
 
         if(requestingUser.getRole() == UserRole.CLIENT){

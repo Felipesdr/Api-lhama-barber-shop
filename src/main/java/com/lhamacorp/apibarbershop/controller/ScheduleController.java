@@ -50,4 +50,13 @@ public class ScheduleController {
 
         return ResponseEntity.ok(barberDTOList);
     }
+
+    @DeleteMapping("/delete/{idSchedule}")
+    @Transactional
+    public ResponseEntity cancelScheduleById(@PathVariable Long idSchedule, @RequestHeader HttpHeaders headers){
+
+        scheduleService.cancelScheduleById(idSchedule, headers);
+
+        return ResponseEntity.noContent().build();
+    }
 }

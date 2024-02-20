@@ -172,4 +172,13 @@ public class ScheduleService {
 
         return availableBarberList;
     }
+
+    public void cancelScheduleById(Long idSchedule, HttpHeaders headers){
+
+        Schedule schedule = scheduleRepository.getReferenceById(idSchedule);
+
+        scheduleValidator.idClientValidation(schedule.getClient().getIdUser(), headers);
+
+        schedule.setStatus(ScheduleStatus.CANCELED);
+    }
 }
