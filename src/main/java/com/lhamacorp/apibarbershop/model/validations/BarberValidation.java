@@ -31,7 +31,7 @@ public class BarberValidation {
 
         for(BarberUnavailableTime UT : barberUnavailableTimeList){
 
-            if(!validateBarberAvailability(data, UT.getFinish(), data.start())){
+            if(!validateBarberAvailability(data, UT.getStart(), UT.getFinish())){
 
                 return false;
             }
