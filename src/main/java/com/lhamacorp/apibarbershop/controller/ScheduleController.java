@@ -6,6 +6,7 @@ import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.ScheduleRegisterDTO;
 import com.lhamacorp.apibarbershop.service.ScheduleService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -23,9 +24,8 @@ public class ScheduleController {
 
     @PostMapping("/register")
     @Transactional
-    public ResponseEntity registerSchedule(@RequestBody ScheduleRegisterDTO request, UriComponentsBuilder uriBuilder){
-        Long idSchedule = scheduleService.registerSchedule(request);
-
+    public ResponseEntity registerSchedule(@RequestBody ScheduleRegisterDTO request, UriComponentsBuilder uriBuilder, @RequestHeader HttpHeaders headers){
+        Long idSchedule = scheduleService.registerSchedule(request, headers);
 
         URI uri = uriBuilder.path("/register/{idSchedule}").buildAndExpand(idSchedule).toUri();
 

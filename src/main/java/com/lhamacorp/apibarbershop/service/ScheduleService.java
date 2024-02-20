@@ -12,6 +12,7 @@ import com.lhamacorp.apibarbershop.repository.*;
 import com.lhamacorp.apibarbershop.utilities.RandomPicker;
 import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 
 
 import java.time.LocalDateTime;
@@ -42,12 +43,14 @@ public class ScheduleService {
     }
 
 
-    public Long registerSchedule(ScheduleRegisterDTO scheduleRegisterData){
+    public Long registerSchedule(ScheduleRegisterDTO scheduleRegisterData, HttpHeaders headers){
 
         //Validate idClient
         if(!userRepository.existsById(scheduleRegisterData.idClient())){
             throw new IdValidationException("Id do cliente não encontrado");
         }
+
+        scheduleValidator.idClientValidation(scheduleRegisterData, headers);
 
         //Validate idService list
         if(!serviceRepository.existsById(scheduleRegisterData.idService())){
