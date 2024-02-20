@@ -1,6 +1,7 @@
 package com.lhamacorp.apibarbershop.model;
 
 import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.ScheduleRegisterDTO;
+import com.lhamacorp.apibarbershop.model.ENUMs.ScheduleStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -23,21 +24,21 @@ public class Schedule {
     @ManyToOne
     @JoinColumn(name = "idService")
     private Service service;
-
-    private Integer idScheduleStatus;
+    @Enumerated(EnumType.STRING)
+    private ScheduleStatus status;
 
 
     public Schedule() {
     }
 
-    public Schedule(Long idSchedule, LocalDateTime start, LocalDateTime finish, User client, User barber, Service service, Integer idScheduleStatus) {
+    public Schedule(Long idSchedule, LocalDateTime start, LocalDateTime finish, User client, User barber, Service service, ScheduleStatus status) {
         this.idSchedule = idSchedule;
         this.start = start;
         this.finish = finish;
         this.client = client;
         this.barber = barber;
         this.service = service;
-        this.idScheduleStatus = idScheduleStatus;
+        this.status = status;
     }
 
     public Schedule(Long idSchedule, LocalDateTime start, LocalDateTime finish, User client, User barber, Service service) {
@@ -47,7 +48,7 @@ public class Schedule {
         this.client = client;
         this.barber = barber;
         this.service = service;
-        this.idScheduleStatus = 1;
+        this.status = ScheduleStatus.PENDING;
     }
 
     public Schedule(ScheduleRegisterDTO scheduleRegisterDTO, User client, User barber, Service service){
@@ -56,7 +57,7 @@ public class Schedule {
         this.client = client;
         this.barber = barber;
         this.service = service;
-        this.idScheduleStatus = 1;
+        this.status = ScheduleStatus.PENDING;
     }
 
     public Long getIdSchedule() {
@@ -107,12 +108,12 @@ public class Schedule {
         this.service = service;
     }
 
-    public Integer getScheduleStatus() {
-        return idScheduleStatus;
+    public ScheduleStatus getStatus() {
+        return status;
     }
 
-    public void setScheduleStatus(Integer scheduleStatus) {
-        this.idScheduleStatus = scheduleStatus;
+    public void setStatus(ScheduleStatus status) {
+        this.status = status;
     }
 
     @Override

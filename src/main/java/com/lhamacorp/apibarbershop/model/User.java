@@ -3,6 +3,7 @@ package com.lhamacorp.apibarbershop.model;
 import com.lhamacorp.apibarbershop.model.DTOs.Users.UserDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.Users.UserRegisterDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.Users.UserUpdateDTO;
+import com.lhamacorp.apibarbershop.model.ENUMs.UserRole;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

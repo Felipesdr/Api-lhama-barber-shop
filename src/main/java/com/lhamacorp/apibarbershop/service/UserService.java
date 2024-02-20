@@ -5,7 +5,7 @@ import com.lhamacorp.apibarbershop.model.DTOs.Users.UserDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.Users.UserRegisterDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.Users.UserUpdateDTO;
 import com.lhamacorp.apibarbershop.model.User;
-import com.lhamacorp.apibarbershop.model.UserRole;
+import com.lhamacorp.apibarbershop.model.ENUMs.UserRole;
 import com.lhamacorp.apibarbershop.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;

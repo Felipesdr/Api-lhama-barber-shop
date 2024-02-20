@@ -4,6 +4,8 @@ import com.lhamacorp.apibarbershop.exceptions.IdValidationException;
 import com.lhamacorp.apibarbershop.model.*;
 import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.ScheduleDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.ScheduleRegisterDTO;
+import com.lhamacorp.apibarbershop.model.ENUMs.ScheduleStatus;
+import com.lhamacorp.apibarbershop.model.ENUMs.UserRole;
 import com.lhamacorp.apibarbershop.model.validations.BarberValidation;
 import com.lhamacorp.apibarbershop.model.validations.ScheduleValidations;
 import com.lhamacorp.apibarbershop.repository.*;
@@ -33,7 +35,7 @@ public class ScheduleService {
     public List<ScheduleDTO> findAllFutureSchedulesNotCanceledByIdBarber(Long idUserBarber){
 
         //Id schedule status 5 = canceled
-        List<Schedule> scheduleList = scheduleRepository.findAllByBarberIdUserAndStartAfterAndIdScheduleStatusNot(idUserBarber, LocalDateTime.now(), 5);
+        List<Schedule> scheduleList = scheduleRepository.findAllByBarberIdUserAndStartAfterAndStatusNot(idUserBarber, LocalDateTime.now(), ScheduleStatus.CANCELED);
 
         return scheduleList.stream().map(ScheduleDTO::new).toList();
 
@@ -126,7 +128,7 @@ public class ScheduleService {
 
             }
 
-            List<Schedule> futureSchedulesList = scheduleRepository.findAllByBarberIdUserAndStartAfterAndIdScheduleStatusNot(U.getIdUser(), LocalDateTime.now(), 5);
+            List<Schedule> futureSchedulesList = scheduleRepository.findAllByBarberIdUserAndStartAfterAndStatusNot(U.getIdUser(), LocalDateTime.now(), ScheduleStatus.CANCELED);
 
             //if barber has no future schedules, availableBarber = true. Id schedule status 5 = canceled
             if(futureSchedulesList.isEmpty()) {

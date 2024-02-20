@@ -1,4 +1,4 @@
-package com.lhamacorp.apibarbershop.model;
+package com.lhamacorp.apibarbershop.model.ENUMs;
 
 public enum UserRole {
     ADMIN("admin"),

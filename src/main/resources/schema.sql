@@ -37,11 +37,6 @@ CREATE TABLE IF NOT EXISTS unavailable_time (
     active BOOLEAN
 );
 
-CREATE TABLE IF NOT EXISTS schedule_status (
-    id_schedule_status INT PRIMARY KEY AUTO_INCREMENT,
-    status VARCHAR(255)
-);
-
 CREATE TABLE IF NOT EXISTS schedule (
     id_schedule INT PRIMARY KEY AUTO_INCREMENT,
     id_client INT NOT NULL,
@@ -49,9 +44,8 @@ CREATE TABLE IF NOT EXISTS schedule (
     id_barber INT NOT NULL,
     start TIMESTAMP NOT NULL,
     finish TIMESTAMP NOT NULL,
-    id_schedule_status INT DEFAULT 1,
+    status VARCHAR(255) NOT NULL,
     FOREIGN KEY (id_client) REFERENCES users(id_user),
     FOREIGN KEY (id_service) REFERENCES service(id_service),
-    FOREIGN KEY (id_barber) REFERENCES users(id_user),
-    FOREIGN KEY (id_schedule_status) REFERENCES schedule_status(id_schedule_status)
+    FOREIGN KEY (id_barber) REFERENCES users(id_user)
 );

@@ -2,7 +2,7 @@ package com.lhamacorp.apibarbershop.repository;
 
 
 import com.lhamacorp.apibarbershop.model.User;
-import com.lhamacorp.apibarbershop.model.UserRole;
+import com.lhamacorp.apibarbershop.model.ENUMs.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;

@@ -41,34 +41,18 @@ VALUES ('Sobrancelha', 'Alinhamento de sobrancelha', 10, 15.00, true);
 INSERT INTO unavailable_time (description, start, finish, active)
 VALUES ('Sexta feira santa', '2024-03-29 09:00:00', '2024-03-29 18:00:00', true);
 
---Insert Schedule status data
-INSERT INTO schedule_status (status)
-VALUES ('pending');
-
-INSERT INTO schedule_status (status)
-VALUES ('confirmed');
-
-INSERT INTO schedule_status (status)
-VALUES ('executing');
-
-INSERT INTO schedule_status (status)
-VALUES ('finished');
-
-INSERT INTO schedule_status (status)
-VALUES ('canceled');
-
 --Insert Schedule data
-INSERT INTO schedule(id_client, id_service, id_barber, start, finish, id_schedule_status)
-VALUES (1, 1, 1, '2024-03-03 09:00:00', '2024-03-03 09:45:00', 2);
+INSERT INTO schedule(id_client, id_service, id_barber, start, finish, status)
+VALUES (1, 1, 1, '2024-03-03 09:00:00', '2024-03-03 09:45:00', 'CONFIRMED');
 
-INSERT INTO schedule(id_client, id_service, id_barber, start, finish, id_schedule_status)
-VALUES (2, 1, 2, '2024-03-03 09:00:00', '2024-03-03 09:45:00', 2);
+INSERT INTO schedule(id_client, id_service, id_barber, start, finish, status)
+VALUES (2, 1, 2, '2024-03-03 09:00:00', '2024-03-03 09:45:00', 'CONFIRMED');
 
-INSERT INTO schedule(id_client, id_service, id_barber, start, finish, id_schedule_status)
-VALUES (1, 1, 3, '2024-05-05 09:00:00', '2023-05-05 09:45:00', 2);
+INSERT INTO schedule(id_client, id_service, id_barber, start, finish, status)
+VALUES (1, 1, 3, '2024-05-05 09:00:00', '2023-05-05 09:45:00', 'CONFIRMED');
 
-INSERT INTO schedule(id_client, id_service, id_barber, start, finish, id_schedule_status)
-VALUES (1, 1, 3, '2024-06-06 09:00:00', '2023-06-06 09:45:00', 2);
+INSERT INTO schedule(id_client, id_service, id_barber, start, finish, status)
+VALUES (1, 1, 3, '2024-06-06 09:00:00', '2023-06-06 09:45:00', 'CONFIRMED');
 
-INSERT INTO schedule(id_client, id_service, id_barber, start, finish, id_schedule_status)
-VALUES (1, 1, 3, '2024-07-07 09:00:00', '2023-07-07 09:45:00', 5);
+INSERT INTO schedule(id_client, id_service, id_barber, start, finish, status)
+VALUES (1, 1, 3, '2024-07-07 09:00:00', '2023-07-07 09:45:00', 'CONFIRMED');

@@ -2,6 +2,7 @@ package com.lhamacorp.apibarbershop.model.validations;
 
 import com.lhamacorp.apibarbershop.model.BarberUnavailableTime;
 import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.ScheduleRegisterDTO;
+import com.lhamacorp.apibarbershop.model.ENUMs.ScheduleStatus;
 import com.lhamacorp.apibarbershop.model.Schedule;
 import com.lhamacorp.apibarbershop.repository.BarberUnavailableTimeRepository;
 import com.lhamacorp.apibarbershop.repository.ScheduleRepository;
@@ -42,7 +43,7 @@ public class BarberValidation {
             }
         }
 
-        List<Schedule> barberScheduleList = scheduleRepository.findAllByBarberIdUserAndStartAfterAndIdScheduleStatusNot(data.idBarber(), LocalDateTime.now(), 5);
+        List<Schedule> barberScheduleList = scheduleRepository.findAllByBarberIdUserAndStartAfterAndStatusNot(data.idBarber(), LocalDateTime.now(), ScheduleStatus.CANCELED);
 
         for(Schedule S : barberScheduleList){
 
