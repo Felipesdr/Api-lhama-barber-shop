@@ -2,6 +2,7 @@ package com.lhamacorp.apibarbershop.service;
 
 import com.lhamacorp.apibarbershop.exceptions.IdValidationException;
 import com.lhamacorp.apibarbershop.model.*;
+import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.AvailableTimeDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.ScheduleDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.ScheduleRegisterDTO;
 import com.lhamacorp.apibarbershop.model.ENUMs.ScheduleStatus;
@@ -191,7 +192,7 @@ public class ScheduleService {
         schedule.setStatus(ScheduleStatus.CANCELED);
     }
 
-    public List<LocalDateTime> getAllAvailableTime(LocalDate day){
+    public List<AvailableTimeDTO> getAllAvailableTime(LocalDate day){
 
 
         List<LocalDateTime> potentialAvailableHours = new ArrayList<>();
@@ -216,7 +217,7 @@ public class ScheduleService {
             }
         }
 
-        return availableHours;
+        return availableHours.stream().map(AvailableTimeDTO::new).toList();
     }
 
     private boolean isTimeAvailable(LocalDateTime firstTime, LocalDateTime lastTime, LocalDateTime potentialAvailableTime){
@@ -240,8 +241,6 @@ public class ScheduleService {
         for(BarberUnavailableTime BUT: allBarberUnavailavleTime){
 
             boolean isAvailable = !intervalValidator.ValidateInterval(BUT.getStart(), BUT.getFinish(), potentialAvailableTime);
-
-            if(isAvailable) return true;
 
             if(!isAvailable) unavailableBarbersCounter ++;
 

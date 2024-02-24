@@ -1,6 +1,7 @@
 package com.lhamacorp.apibarbershop.controller;
 
 import com.lhamacorp.apibarbershop.model.DTOs.Users.UserDTO;
+import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.AvailableTimeDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.ScheduleDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.ScheduleRegisterDTO;
 import com.lhamacorp.apibarbershop.service.ScheduleService;
@@ -54,7 +55,7 @@ public class ScheduleController {
     }
 
     @GetMapping("availableTime/{day}")
-    public ResponseEntity<List<LocalDateTime>> getAvailableTime(@PathVariable LocalDate day){
+    public ResponseEntity<List<AvailableTimeDTO>> getAvailableTime(@PathVariable LocalDate day){
 
         return ResponseEntity.ok(scheduleService.getAllAvailableTime(day));
 
