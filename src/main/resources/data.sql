@@ -27,6 +27,18 @@ VALUES ('Carnaval', '2024-02-10 09:00:00', '2024-02-13 18:00:00', 1, TRUE);
 INSERT INTO barber_unavailable_time(description, start, finish, id_barber, active)
 VALUES ('Carnaval', '2024-02-10 09:00:00', '2024-02-13 18:00:00', 3, TRUE);
 
+INSERT INTO barber_unavailable_time(description, start, finish, id_barber, active)
+VALUES ('Carnaval', '2024-03-29 14:30:00', '2024-03-29 15:00:00', 3, TRUE);
+
+INSERT INTO barber_unavailable_time(description, start, finish, id_barber, active)
+VALUES ('Carnaval', '2024-03-29 14:30:00', '2024-03-29 15:00:00', 2, TRUE);
+
+INSERT INTO barber_unavailable_time(description, start, finish, id_barber, active)
+VALUES ('Carnaval', '2024-03-29 14:30:00', '2024-03-29 15:00:00', 1, TRUE);
+
+INSERT INTO barber_unavailable_time(description, start, finish, id_barber, active)
+VALUES ('Carnaval', '2024-03-29 16:00:00', '2024-03-29 16:30:00', 1, TRUE);
+
 --Insert Service data
 INSERT INTO service (name, description, duration, price, active)
 VALUES ('Cabelo', 'Corte de cabelo', 45, 45.00, true);
@@ -39,20 +51,20 @@ VALUES ('Sobrancelha', 'Alinhamento de sobrancelha', 10, 15.00, true);
 
 --Insert Unavailable time data
 INSERT INTO unavailable_time (description, start, finish, active)
-VALUES ('Sexta feira santa', '2024-03-29 09:00:00', '2024-03-29 18:00:00', true);
+VALUES ('Sexta feira santa', '2024-03-29 09:00:00', '2024-03-29 12:00:00', true);
 
 --Insert Schedule data
 INSERT INTO schedule(id_client, id_service, id_barber, start, finish, status)
-VALUES (1, 1, 1, '2024-03-03 09:00:00', '2024-03-03 09:45:00', 'CONFIRMED');
+VALUES (1, 1, 1, '2024-03-29 13:00:00', '2024-03-29 13:30:00', 'CONFIRMED');
 
 INSERT INTO schedule(id_client, id_service, id_barber, start, finish, status)
-VALUES (2, 1, 2, '2024-03-03 09:00:00', '2024-03-03 09:45:00', 'CONFIRMED');
+VALUES (1, 1, 2, '2024-03-29 13:00:00', '2024-03-29 13:30:00', 'CONFIRMED');
 
 INSERT INTO schedule(id_client, id_service, id_barber, start, finish, status)
-VALUES (1, 1, 3, '2024-05-05 09:00:00', '2024-05-05 09:45:00', 'CONFIRMED');
+VALUES (1, 1, 3, '2024-03-29 13:00:00', '2024-03-29 13:30:00', 'CONFIRMED');
 
 INSERT INTO schedule(id_client, id_service, id_barber, start, finish, status)
-VALUES (1, 1, 3, '2024-06-06 09:00:00', '2024-06-06 09:45:00', 'CONFIRMED');
+VALUES (1, 1, 3, '2024-03-29 13:30:00', '2024-03-29 14:00:00', 'CONFIRMED');
 
 INSERT INTO schedule(id_client, id_service, id_barber, start, finish, status)
 VALUES (1, 1, 3, '2024-07-07 09:00:00', '2024-07-07 09:45:00', 'CONFIRMED');

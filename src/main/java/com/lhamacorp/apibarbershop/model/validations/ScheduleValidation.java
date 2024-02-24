@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -97,6 +98,8 @@ public class ScheduleValidation {
         }
 
     }
+
+
 
 
 }

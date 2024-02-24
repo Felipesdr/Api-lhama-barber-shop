@@ -7,6 +7,7 @@ import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.ScheduleRegisterDTO;
 import com.lhamacorp.apibarbershop.model.ENUMs.ScheduleStatus;
 import com.lhamacorp.apibarbershop.model.ENUMs.UserRole;
 import com.lhamacorp.apibarbershop.model.validations.BarberValidation;
+import com.lhamacorp.apibarbershop.model.validations.IntervalValidation;
 import com.lhamacorp.apibarbershop.model.validations.ScheduleValidation;
 import com.lhamacorp.apibarbershop.repository.*;
 import com.lhamacorp.apibarbershop.utilities.RandomPicker;
@@ -15,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 
 @org.springframework.stereotype.Service
@@ -29,9 +32,13 @@ public class ScheduleService {
     @Autowired
     private BarberUnavailableTimeRepository barberUnavailableTimeRepository;
     @Autowired
+    private UnavailableTimeRepository unavailableTimeRepository;
+    @Autowired
     BarberValidation barberValidator;
     @Autowired
     ScheduleValidation scheduleValidator;
+    @Autowired
+    IntervalValidation intervalValidator;
 
     public List<ScheduleDTO> findAllFutureSchedulesNotCanceledByIdBarber(Long idUserBarber){
 
@@ -156,7 +163,7 @@ public class ScheduleService {
                 }
             }
 
-            if(barberUnavailableTime == true && barberSchedule == true){
+            if(barberUnavailableTime && barberSchedule){
 
                 availableBarberList.add(U);
 
@@ -173,6 +180,8 @@ public class ScheduleService {
         return availableBarberList;
     }
 
+
+
     public void cancelScheduleById(Long idSchedule, HttpHeaders headers){
 
         Schedule schedule = scheduleRepository.getReferenceById(idSchedule);
@@ -180,5 +189,82 @@ public class ScheduleService {
         scheduleValidator.idClientValidation(schedule.getClient().getIdUser(), headers);
 
         schedule.setStatus(ScheduleStatus.CANCELED);
+    }
+
+    public List<LocalDateTime> getAllAvailableTime(LocalDate day){
+
+
+        List<LocalDateTime> potentialAvailableHours = new ArrayList<>();
+        List<LocalDateTime> availableHours = new ArrayList<>();
+        LocalTime time = LocalTime.of(9,00);
+        LocalDateTime firstDateTime = day.atTime(time);
+        LocalDateTime temp = firstDateTime;
+
+        for(int i = 0; i <= 17; i++){
+
+            potentialAvailableHours.add(temp);
+
+            temp = temp.plusMinutes(30);
+        }
+
+        LocalDateTime lastDateTime = potentialAvailableHours.get(potentialAvailableHours.size() -1);
+
+        for(LocalDateTime PAH : potentialAvailableHours){
+
+            if(isTimeAvailable(firstDateTime, lastDateTime, PAH)){
+                availableHours.add(PAH);
+            }
+        }
+
+        return availableHours;
+    }
+
+    private boolean isTimeAvailable(LocalDateTime firstTime, LocalDateTime lastTime, LocalDateTime potentialAvailableTime){
+
+        List<UnavailableTime> allUnavailableTime = unavailableTimeRepository.findAllByStartAfterOrStartEquals(firstTime, firstTime);
+
+        for(UnavailableTime UT: allUnavailableTime){
+
+            boolean isAvailable = !intervalValidator.ValidateInterval(UT.getStart(), UT.getFinish(), potentialAvailableTime);
+
+            if(!isAvailable){
+                return false;
+            }
+
+        }
+
+        List<BarberUnavailableTime> allBarberUnavailavleTime = barberUnavailableTimeRepository.findAllByStartAfterOrStartEqualsAndStartBefore(firstTime, firstTime, lastTime);
+        long totalOfBarbers = userRepository.findAllByActiveTrueAndRole(UserRole.BARBER).size();
+        int unavailableBarbersCounter = 0;
+
+        for(BarberUnavailableTime BUT: allBarberUnavailavleTime){
+
+            boolean isAvailable = !intervalValidator.ValidateInterval(BUT.getStart(), BUT.getFinish(), potentialAvailableTime);
+
+            if(isAvailable) return true;
+
+            if(!isAvailable) unavailableBarbersCounter ++;
+
+            if(unavailableBarbersCounter == (int) totalOfBarbers) return false;
+        }
+
+        List<Schedule> allSchedules = scheduleRepository.findAllByStartAfterOrStartEqualsAndStartBeforeAndStatusNot(firstTime, firstTime, lastTime, ScheduleStatus.CANCELED);
+        unavailableBarbersCounter = 0;
+
+        for(Schedule S: allSchedules){
+
+            boolean isAvailable = !intervalValidator.ValidateInterval(S.getStart(), S.getFinish(), potentialAvailableTime);
+
+            if(isAvailable) return true;
+
+            if(!isAvailable) unavailableBarbersCounter ++;
+
+            if(unavailableBarbersCounter == (int) totalOfBarbers) return false;
+
+        }
+
+
+        return false;
+
     }
 }

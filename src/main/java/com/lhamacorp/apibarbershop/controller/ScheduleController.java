@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.MonthDay;
 import java.util.List;
 
 @RestController
@@ -49,6 +51,13 @@ public class ScheduleController {
         List<UserDTO> barberDTOList = scheduleService.findAvailableBarbers(scheduleRegisterDTO).stream().map(UserDTO::new).toList();
 
         return ResponseEntity.ok(barberDTOList);
+    }
+
+    @GetMapping("availableTime/{day}")
+    public ResponseEntity<List<LocalDateTime>> getAvailableTime(@PathVariable LocalDate day){
+
+        return ResponseEntity.ok(scheduleService.getAllAvailableTime(day));
+
     }
 
     @DeleteMapping("/delete/{idSchedule}")

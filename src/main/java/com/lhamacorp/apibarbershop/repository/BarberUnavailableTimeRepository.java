@@ -11,4 +11,6 @@ import java.util.List;
 @Repository
 public interface BarberUnavailableTimeRepository extends JpaRepository<BarberUnavailableTime, Long> {
     List<BarberUnavailableTime> findAllByBarberIdUserAndActiveTrueAndStartAfter(Long idBarber, LocalDateTime now);
+
+    List<BarberUnavailableTime> findAllByStartAfterOrStartEqualsAndStartBefore(LocalDateTime start, LocalDateTime startt, LocalDateTime finish);
 }
