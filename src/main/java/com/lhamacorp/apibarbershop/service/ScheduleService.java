@@ -266,12 +266,27 @@ public class ScheduleService {
 
     }
 
-    public ScheduleDTO confirmScheduleById(Long scheduleId){
+    public ScheduleDTO confirmScheduleById(Long idSchedule){
 
-        Schedule schedule = scheduleRepository.getReferenceById(scheduleId);
+        Schedule schedule = scheduleRepository.getReferenceById(idSchedule);
         schedule.setStatus(ScheduleStatus.CONFIRMED);
 
         return  new ScheduleDTO(schedule);
+    }
+
+    public ScheduleDTO startScheduleById(Long idSchedule){
+
+        Schedule schedule = scheduleRepository.getReferenceById(idSchedule);
+
+        if(schedule.getStatus() != ScheduleStatus.CONFIRMED){
+
+            throw new RuntimeException("Esse atendimento não foi confirmado");
+        }
+
+        schedule.setStatus(ScheduleStatus.EXECUTING);
+
+        return  new ScheduleDTO(schedule);
+
     }
 
 

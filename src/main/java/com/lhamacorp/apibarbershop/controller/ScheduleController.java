@@ -68,6 +68,15 @@ public class ScheduleController {
         return ResponseEntity.ok(scheduleService.confirmScheduleById(idSchedule));
     }
 
+    @PutMapping("start/{idSchedule}")
+    @Transactional
+    public ResponseEntity startSchedule(@PathVariable Long idSchedule){
+
+        return ResponseEntity.ok(scheduleService.startScheduleById(idSchedule));
+    }
+
+
+
     @DeleteMapping("/calcel/{idSchedule}")
     @Transactional
     public ResponseEntity cancelScheduleById(@PathVariable Long idSchedule, @RequestHeader HttpHeaders headers){

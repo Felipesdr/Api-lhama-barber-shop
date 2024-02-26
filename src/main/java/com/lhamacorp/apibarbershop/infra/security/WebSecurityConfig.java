@@ -48,6 +48,7 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/unavailableTime/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/unavailableTime/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/schedule/confirm/**").hasRole("BARBER")
+                        .requestMatchers(HttpMethod.PUT, "/schedule/start/**").hasRole("BARBER")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFIlter, UsernamePasswordAuthenticationFilter.class)
