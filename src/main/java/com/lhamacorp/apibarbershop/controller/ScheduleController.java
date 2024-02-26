@@ -75,7 +75,12 @@ public class ScheduleController {
         return ResponseEntity.ok(scheduleService.startScheduleById(idSchedule));
     }
 
+    @PutMapping("finish/{idSchedule}")
+    @Transactional
+    public ResponseEntity finishSchedule(@PathVariable Long idSchedule){
 
+        return ResponseEntity.ok(scheduleService.finishScheduleById(idSchedule));
+    }
 
     @DeleteMapping("/calcel/{idSchedule}")
     @Transactional

@@ -289,5 +289,20 @@ public class ScheduleService {
 
     }
 
+    public ScheduleDTO finishScheduleById(Long idSchedule){
+
+        Schedule schedule = scheduleRepository.getReferenceById(idSchedule);
+
+        if(schedule.getStatus() != ScheduleStatus.EXECUTING){
+
+            throw new RuntimeException("Esse atendimento não foi executado");
+        }
+
+        schedule.setStatus(ScheduleStatus.FINISHED);
+
+        return  new ScheduleDTO(schedule);
+
+    }
+
 
 }
