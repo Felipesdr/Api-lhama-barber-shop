@@ -1,6 +1,7 @@
-package com.lhamacorp.apibarbershop.infra.exception;
+package com.lhamacorp.apibarbershop.exception;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -21,14 +22,25 @@ public class ErrorHandler {
     public ResponseEntity handleError400(MethodArgumentNotValidException exception){
 
         var errors = exception.getFieldErrors();
-        return ResponseEntity.badRequest().body(errors.stream().map(ValidationErrorDTO::new).toList());
+        return ResponseEntity.badRequest().body(errors.stream().map(BeanValidationErrorDTO::new).toList());
     }
 
-    private record ValidationErrorDTO (String field, String message){
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity handleValidationException(ValidationException exception){
 
-        public ValidationErrorDTO(FieldError error){
+        String exMsg = exception.getMessage();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ScheduleValidationErrorDTO(exMsg));
+    }
+
+    private record BeanValidationErrorDTO(String field, String message){
+
+        public BeanValidationErrorDTO(FieldError error){
             this(error.getField(), error.getDefaultMessage());
         }
+    }
+
+    private record ScheduleValidationErrorDTO(String message){
+
     }
 
 }

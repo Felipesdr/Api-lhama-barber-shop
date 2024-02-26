@@ -1,6 +1,7 @@
 package com.lhamacorp.apibarbershop.service;
 
-import com.lhamacorp.apibarbershop.exceptions.IdValidationException;
+import com.lhamacorp.apibarbershop.exception.IdValidationException;
+import com.lhamacorp.apibarbershop.exception.ValidationException;
 import com.lhamacorp.apibarbershop.model.*;
 import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.AvailableTimeDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.ScheduleDTO;
@@ -12,7 +13,6 @@ import com.lhamacorp.apibarbershop.model.validations.IntervalValidation;
 import com.lhamacorp.apibarbershop.model.validations.ScheduleValidation;
 import com.lhamacorp.apibarbershop.repository.*;
 import com.lhamacorp.apibarbershop.utilities.RandomPicker;
-import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 
@@ -55,19 +55,19 @@ public class ScheduleService {
 
         //Validate idClient
         if(!userRepository.existsById(scheduleRegisterData.idClient())){
-            throw new IdValidationException("Id do cliente não encontrado");
+            throw new ValidationException("Id do cliente não encontrado");
         }
 
         scheduleValidator.idClientValidation(scheduleRegisterData, headers);
 
         //Validate idService list
         if(!serviceRepository.existsById(scheduleRegisterData.idService())){
-            throw new IdValidationException("Id do serviço não encontrado");
+            throw new ValidationException("Id do serviço não encontrado");
         }
 
         //Validate idBarber
         if(scheduleRegisterData.idBarber()!= null && !userRepository.existsById(scheduleRegisterData.idBarber())){
-            throw new IdValidationException("Id do barbeiro não encontrado");
+            throw new ValidationException("Id do barbeiro não encontrado");
         }
 
         //Validate business hours
