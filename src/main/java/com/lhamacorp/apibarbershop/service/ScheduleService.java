@@ -262,8 +262,17 @@ public class ScheduleService {
 
         }
 
-
         return false;
 
     }
+
+    public ScheduleDTO confirmScheduleById(Long scheduleId){
+
+        Schedule schedule = scheduleRepository.getReferenceById(scheduleId);
+        schedule.setStatus(ScheduleStatus.CONFIRMED);
+
+        return  new ScheduleDTO(schedule);
+    }
+
+
 }

@@ -61,7 +61,14 @@ public class ScheduleController {
 
     }
 
-    @DeleteMapping("/delete/{idSchedule}")
+    @PutMapping("confirm/{idSchedule}")
+    @Transactional
+    public ResponseEntity confirmSchedule(@PathVariable Long idSchedule){
+
+        return ResponseEntity.ok(scheduleService.confirmScheduleById(idSchedule));
+    }
+
+    @DeleteMapping("/calcel/{idSchedule}")
     @Transactional
     public ResponseEntity cancelScheduleById(@PathVariable Long idSchedule, @RequestHeader HttpHeaders headers){
 
@@ -69,4 +76,5 @@ public class ScheduleController {
 
         return ResponseEntity.noContent().build();
     }
+
 }
