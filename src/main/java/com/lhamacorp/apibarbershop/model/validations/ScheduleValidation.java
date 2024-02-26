@@ -1,5 +1,6 @@
 package com.lhamacorp.apibarbershop.model.validations;
 
+import com.lhamacorp.apibarbershop.exception.ValidationException;
 import com.lhamacorp.apibarbershop.infra.security.TokenService;
 import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.ScheduleRegisterDTO;
 import com.lhamacorp.apibarbershop.model.ENUMs.UserRole;
@@ -7,7 +8,6 @@ import com.lhamacorp.apibarbershop.model.UnavailableTime;
 import com.lhamacorp.apibarbershop.model.User;
 import com.lhamacorp.apibarbershop.repository.UnavailableTimeRepository;
 import com.lhamacorp.apibarbershop.repository.UserRepository;
-import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -78,7 +78,7 @@ public class ScheduleValidation {
 
             if(userRequestingId != schedulingUserId){
 
-                throw new RuntimeException("Você não pode fazer isso!");
+                throw new ValidationException("Você não pode realizar essa operação com outro usuário");
             }
         }
 
@@ -92,7 +92,7 @@ public class ScheduleValidation {
 
             if(intervalValidation.ValidateInterval(UT.getStart(), UT.getFinish(), scheduleRegisterDTO.start())){
 
-                throw new RuntimeException("A barbearia não está funcionando nessa data");
+                throw new ValidationException("A barbearia não está funcionando nessa data");
             }
 
         }

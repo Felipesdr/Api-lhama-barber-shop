@@ -55,19 +55,19 @@ public class ScheduleService {
 
         //Validate idClient
         if(!userRepository.existsById(scheduleRegisterData.idClient())){
-            throw new ValidationException("Id do cliente não encontrado");
+            throw new ValidationException("Id do cliente não encontrado.");
         }
 
         scheduleValidator.idClientValidation(scheduleRegisterData, headers);
 
         //Validate idService list
         if(!serviceRepository.existsById(scheduleRegisterData.idService())){
-            throw new ValidationException("Id do serviço não encontrado");
+            throw new ValidationException("Id do serviço não encontrado.");
         }
 
         //Validate idBarber
         if(scheduleRegisterData.idBarber()!= null && !userRepository.existsById(scheduleRegisterData.idBarber())){
-            throw new ValidationException("Id do barbeiro não encontrado");
+            throw new ValidationException("Id do barbeiro não encontrado.");
         }
 
         //Validate business hours
@@ -97,7 +97,7 @@ public class ScheduleService {
                 return userRepository.findById(scheduleRegisterData.idBarber()).get();
 
             }else{
-                throw new ValidationException("Esse barbeiro está indisponível para essa data");
+                throw new ValidationException("Esse barbeiro está indisponível para essa data.");
             }
         }
 
@@ -174,7 +174,7 @@ public class ScheduleService {
 
         if(availableBarberList.isEmpty()){
 
-            throw new ValidationException("Nenhum barbeiro disponivel para essa data!");
+            throw new ValidationException("Nenhum barbeiro disponivel para essa data.");
 
         }
 
@@ -271,6 +271,11 @@ public class ScheduleService {
         Schedule schedule = scheduleRepository.getReferenceById(idSchedule);
         schedule.setStatus(ScheduleStatus.CONFIRMED);
 
+        if(schedule.getStatus() != ScheduleStatus.PENDING){
+
+            throw new ValidationException("Esse atendimento não está pendente.");
+        }
+
         return  new ScheduleDTO(schedule);
     }
 
@@ -280,7 +285,7 @@ public class ScheduleService {
 
         if(schedule.getStatus() != ScheduleStatus.CONFIRMED){
 
-            throw new RuntimeException("Esse atendimento não foi confirmado");
+            throw new ValidationException("Esse atendimento não foi confirmado.");
         }
 
         schedule.setStatus(ScheduleStatus.EXECUTING);
@@ -295,7 +300,7 @@ public class ScheduleService {
 
         if(schedule.getStatus() != ScheduleStatus.EXECUTING){
 
-            throw new RuntimeException("Esse atendimento não foi executado");
+            throw new ValidationException("Esse atendimento não foi executado.");
         }
 
         schedule.setStatus(ScheduleStatus.FINISHED);
