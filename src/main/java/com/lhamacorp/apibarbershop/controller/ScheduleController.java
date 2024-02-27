@@ -1,5 +1,6 @@
 package com.lhamacorp.apibarbershop.controller;
 
+import com.lhamacorp.apibarbershop.infra.security.TokenService;
 import com.lhamacorp.apibarbershop.model.DTOs.Users.UserDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.AvailableTimeDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.ScheduleDTO;
@@ -28,10 +29,16 @@ public class ScheduleController {
     @Autowired
     private ScheduleService scheduleService;
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping("/register")
     @Transactional
     public ResponseEntity registerSchedule(@RequestBody @Valid ScheduleRegisterDTO request, UriComponentsBuilder uriBuilder, @RequestHeader HttpHeaders headers){
-        Long idSchedule = scheduleService.registerSchedule(request, headers);
+
+        Long idRequestingUser = tokenService.getIdFromToken(headers);
+
+        Long idSchedule = scheduleService.registerSchedule(request, idRequestingUser);
 
         URI uri = uriBuilder.path("/register/{idSchedule}").buildAndExpand(idSchedule).toUri();
 
@@ -88,7 +95,9 @@ public class ScheduleController {
     @Transactional
     public ResponseEntity cancelScheduleById(@PathVariable Long idSchedule, @RequestHeader HttpHeaders headers){
 
-        scheduleService.cancelScheduleById(idSchedule, headers);
+        Long idRequestingUser = tokenService.getIdFromToken(headers);
+
+        scheduleService.cancelScheduleById(idSchedule, idRequestingUser);
 
         return ResponseEntity.noContent().build();
     }

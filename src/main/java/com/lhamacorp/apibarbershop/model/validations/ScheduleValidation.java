@@ -56,26 +56,24 @@ public class ScheduleValidation {
 
     }
 
-    public void idClientValidation(ScheduleRegisterDTO scheduleRegisterDTO, HttpHeaders headers){
+    public void idClientValidation(ScheduleRegisterDTO scheduleRegisterDTO, Long idRequestingUser){
 
         Long schedulingUserId = scheduleRegisterDTO.idClient();
 
-        idClientValidation(schedulingUserId, headers);
+        idClientValidation(schedulingUserId, idRequestingUser);
 
     }
 
-    public void idClientValidation(Long idClient, HttpHeaders headers){
+    public void idClientValidation(Long idClient, Long idRequestingUser){
 
-        Long userRequestingId = tokenService.getIdFromToken(headers);
-
-        User requestingUser = userRepository.getReferenceById(userRequestingId);
+        User requestingUser = userRepository.getReferenceById(idRequestingUser);
 
         Long schedulingUserId = idClient;
 
 
         if(requestingUser.getRole() == UserRole.CLIENT){
 
-            if(userRequestingId != schedulingUserId){
+            if(idRequestingUser != schedulingUserId){
 
                 throw new ValidationException("Você não pode realizar essa operação com outro usuário");
             }

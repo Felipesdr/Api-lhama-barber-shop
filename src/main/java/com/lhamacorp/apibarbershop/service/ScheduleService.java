@@ -50,14 +50,14 @@ public class ScheduleService {
     }
 
 
-    public Long registerSchedule(ScheduleRegisterDTO scheduleRegisterData, HttpHeaders headers){
+    public Long registerSchedule(ScheduleRegisterDTO scheduleRegisterData, Long idRequestingUser){
 
         //Validate idClient
         if(!userRepository.existsById(scheduleRegisterData.idClient())){
             throw new ValidationException("Id do cliente não encontrado.");
         }
 
-        scheduleValidator.idClientValidation(scheduleRegisterData, headers);
+        scheduleValidator.idClientValidation(scheduleRegisterData, idRequestingUser);
 
         //Validate idService list
         if(!serviceRepository.existsById(scheduleRegisterData.idService())){
@@ -182,11 +182,11 @@ public class ScheduleService {
 
 
 
-    public void cancelScheduleById(Long idSchedule, HttpHeaders headers){
+    public void cancelScheduleById(Long idSchedule, Long idRequestingUser){
 
         Schedule schedule = scheduleRepository.getReferenceById(idSchedule);
 
-        scheduleValidator.idClientValidation(schedule.getClient().getIdUser(), headers);
+        scheduleValidator.idClientValidation(schedule.getClient().getIdUser(), idRequestingUser);
 
         schedule.setStatus(ScheduleStatus.CANCELED);
     }
