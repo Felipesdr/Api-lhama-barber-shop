@@ -3,6 +3,7 @@ package com.lhamacorp.apibarbershop.controller;
 import com.lhamacorp.apibarbershop.model.DTOs.BarberUnavailableTimeDTOs.BarberUnavailableTimeDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.BarberUnavailableTimeDTOs.BarberUnavailableTimeRegisterDTO;
 import com.lhamacorp.apibarbershop.service.BarberUnavaibleTimeService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("barberUnavailableTime")
+@SecurityRequirement(name = "bearer-key")
 public class BarberUnavaibleTimeController {
     @Autowired
     private BarberUnavaibleTimeService service;

@@ -4,6 +4,7 @@ package com.lhamacorp.apibarbershop.controller;
 import com.lhamacorp.apibarbershop.model.DTOs.UnavailableTimeDTOs.UnavailableTimeDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.UnavailableTimeDTOs.UnavailableTimeRegisterDTO;
 import com.lhamacorp.apibarbershop.service.UnavailableTimeService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("unavailableTime")
+@SecurityRequirement(name = "bearer-key")
 public class UnavailableTimeController {
 
     @Autowired

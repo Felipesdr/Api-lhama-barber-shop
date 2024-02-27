@@ -3,6 +3,7 @@ package com.lhamacorp.apibarbershop.controller;
 import com.lhamacorp.apibarbershop.model.DTOs.Users.UserRegisterDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.Users.UserUpdateDTO;
 import com.lhamacorp.apibarbershop.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -24,7 +25,6 @@ public class UserController {
 
         if(userService.registerUserClient(userRegisterData) == null){
 
-            System.out.printf("============================== caiu aqui babaca =================================");
             return ResponseEntity.badRequest().build();
 
         }
@@ -37,6 +37,7 @@ public class UserController {
 
     @PostMapping("/register/barber")
     @Transactional
+    @SecurityRequirement(name = "bearer-key")
     public ResponseEntity registerUserBarber(@RequestBody UserRegisterDTO userRegisterData, UriComponentsBuilder uriBuilder){
 
         if(userService.registerUserBarber(userRegisterData) == null){
@@ -51,6 +52,7 @@ public class UserController {
 
     @PutMapping("/update/account")
     @Transactional
+    @SecurityRequirement(name = "bearer-key")
     public ResponseEntity updateUserAccountData(@RequestBody UserUpdateDTO userUpdateData, @RequestHeader HttpHeaders header){
 
         UserUpdateDTO userUpdated = userService.updateUserOwnAccount(userUpdateData, header);
@@ -65,6 +67,7 @@ public class UserController {
 
     @PutMapping("/update")
     @Transactional
+    @SecurityRequirement(name = "bearer-key")
     public ResponseEntity updateUser(@RequestBody UserUpdateDTO userUpdateData){
 
         UserUpdateDTO userUpdated = userService.updateUser(userUpdateData);
@@ -74,6 +77,7 @@ public class UserController {
 
     @DeleteMapping("delete/{idUser}")
     @Transactional
+    @SecurityRequirement(name = "bearer-key")
     public ResponseEntity deleteBarberOrClient(@PathVariable Long idUser){
 
         userService.deleteBarberOrClient(idUser);

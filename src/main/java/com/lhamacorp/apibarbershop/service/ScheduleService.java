@@ -1,7 +1,6 @@
 package com.lhamacorp.apibarbershop.service;
 
-import com.lhamacorp.apibarbershop.exception.IdValidationException;
-import com.lhamacorp.apibarbershop.exception.ValidationException;
+import com.lhamacorp.apibarbershop.infra.exception.ValidationException;
 import com.lhamacorp.apibarbershop.model.*;
 import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.AvailableTimeDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.ScheduleDTO;

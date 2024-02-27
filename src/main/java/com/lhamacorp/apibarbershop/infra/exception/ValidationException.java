@@ -1,4 +1,4 @@
-package com.lhamacorp.apibarbershop.exception;
+package com.lhamacorp.apibarbershop.infra.exception;
 
 public class ValidationException extends RuntimeException{
 

@@ -50,6 +50,8 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/schedule/confirm/**").hasRole("BARBER")
                         .requestMatchers(HttpMethod.PUT, "/schedule/start/**").hasRole("BARBER")
                         .requestMatchers(HttpMethod.PUT, "/schedule/finish/**").hasRole("BARBER")
+                        .requestMatchers("swagger-ui/**").permitAll()
+                        .requestMatchers("v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFIlter, UsernamePasswordAuthenticationFilter.class)

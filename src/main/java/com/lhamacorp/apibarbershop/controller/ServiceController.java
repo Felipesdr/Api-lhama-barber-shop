@@ -3,6 +3,7 @@ package com.lhamacorp.apibarbershop.controller;
 import com.lhamacorp.apibarbershop.model.DTOs.serviceDTOs.ServiceRegisterDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.serviceDTOs.ServiceUpdateDTO;
 import com.lhamacorp.apibarbershop.service.ServiceService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/service")
+@SecurityRequirement(name = "bearer-key")
 public class ServiceController {
     @Autowired
     private ServiceService serviceService;

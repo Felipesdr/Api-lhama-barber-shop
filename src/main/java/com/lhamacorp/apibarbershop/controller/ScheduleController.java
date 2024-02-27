@@ -5,6 +5,7 @@ import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.AvailableTimeDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.ScheduleDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.ScheduleRegisterDTO;
 import com.lhamacorp.apibarbershop.service.ScheduleService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("schedule")
+@SecurityRequirement(name = "bearer-key")
 public class ScheduleController {
 
     @Autowired

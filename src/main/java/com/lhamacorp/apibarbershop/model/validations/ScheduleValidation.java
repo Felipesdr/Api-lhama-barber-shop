@@ -1,6 +1,6 @@
 package com.lhamacorp.apibarbershop.model.validations;
 
-import com.lhamacorp.apibarbershop.exception.ValidationException;
+import com.lhamacorp.apibarbershop.infra.exception.ValidationException;
 import com.lhamacorp.apibarbershop.infra.security.TokenService;
 import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.ScheduleRegisterDTO;
 import com.lhamacorp.apibarbershop.model.ENUMs.UserRole;
@@ -13,7 +13,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
