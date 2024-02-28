@@ -75,7 +75,7 @@ public class ScheduleValidation {
 
             if(idRequestingUser != schedulingUserId){
 
-                throw new ValidationException("Você não pode realizar essa operação com outro usuário");
+                throw new ValidationException("Você não pode realizar essa operação com outro usuário.");
             }
         }
 

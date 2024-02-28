@@ -1,8 +1,7 @@
 package com.lhamacorp.apibarbershop.service;
 
-import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.ScheduleDTO;
+import com.lhamacorp.apibarbershop.infra.exception.ValidationException;
 import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.ScheduleRegisterDTO;
-import com.lhamacorp.apibarbershop.model.ENUMs.ScheduleStatus;
 import com.lhamacorp.apibarbershop.model.validations.BarberValidation;
 import com.lhamacorp.apibarbershop.model.validations.IntervalValidation;
 import com.lhamacorp.apibarbershop.model.validations.ScheduleValidation;
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
 
@@ -38,21 +36,46 @@ class ScheduleServiceTest {
     private ScheduleValidation scheduleValidator;
     @Autowired
     private IntervalValidation intervalValidator;
-    private ScheduleRegisterDTO scheduleRegisterDTOSuccess;
+    private ScheduleRegisterDTO scheduleRegisterDTOSuccess, scheduleDTOIdClienteDontExist, scheduleDTOIdClientNotValid;
+
     @BeforeEach
     void setUp() {
 
         scheduleRegisterDTOSuccess = createScheduleDTOSuccess();
+        scheduleDTOIdClienteDontExist = createScheduleDTOIdClienteDontExist();
+        scheduleDTOIdClientNotValid = createScheduleDTOIdClientNotValid();
     }
 
     @Test
-    @DisplayName("Should return the new schedule id's if all went ok")
+    @DisplayName("Should return schedule id 6 if all went ok")
     @Transactional
     void registerScheduleCase1() {
 
         assertEquals(6L, scheduleService.registerSchedule(scheduleRegisterDTOSuccess, 4L));
 
     }
+
+    @Test
+    @DisplayName("Should return ValidationException wtih message: Id do cliente não encontrado. When clients id dosen't exist")
+    @Transactional
+    void registerScheduleCase2() {
+
+        assertThrowsExactly(ValidationException.class,
+                ()-> scheduleService.registerSchedule(scheduleDTOIdClienteDontExist, 4L),
+                "Id do cliente não encontrado.");
+    }
+
+    @Test
+    @DisplayName("Should return ValidationException wtih message: Você não pode realizar essa operação com outro usuário. when a client try to register a schedule for another client")
+    @Transactional
+    void registerScheduleCase3() {
+
+        assertThrowsExactly(ValidationException.class,
+                ()-> scheduleService.registerSchedule(scheduleDTOIdClientNotValid, 4L),
+                "Você não pode realizar essa operação com outro usuário.");
+    }
+
+
 
     @Test
     void findAvailableBarbers() {
@@ -65,8 +88,19 @@ class ScheduleServiceTest {
     private ScheduleRegisterDTO createScheduleDTOSuccess(){
 
         LocalDateTime start = LocalDateTime.of(2024, 04, 29, 14, 30, 00);
-
-
         return new ScheduleRegisterDTO(start, 30, 4L, 1L, 1L) ;
+    }
+
+    private ScheduleRegisterDTO createScheduleDTOIdClienteDontExist(){
+
+        LocalDateTime start = LocalDateTime.of(2024, 04, 29, 14, 30, 00);
+        return new ScheduleRegisterDTO(start, 30, 10L, 1L, 1L) ;
+
+    }
+
+    private ScheduleRegisterDTO createScheduleDTOIdClientNotValid(){
+
+        LocalDateTime start = LocalDateTime.of(2024, 04, 29, 14, 30, 00);
+        return new ScheduleRegisterDTO(start, 30, 5L, 1L, 1L) ;
     }
 }
