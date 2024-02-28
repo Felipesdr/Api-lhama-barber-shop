@@ -37,6 +37,7 @@ class ScheduleServiceTest {
     @Autowired
     private IntervalValidation intervalValidator;
     private ScheduleRegisterDTO scheduleRegisterDTOSuccess, scheduleDTOIdClienteDontExist, scheduleDTOIdClientNotValid;
+    private ScheduleRegisterDTO scheduleRegisterDTOIdServiceDontExist, scheduleRegisterDTOIdBarberDontExist;
 
     @BeforeEach
     void setUp() {
@@ -44,6 +45,8 @@ class ScheduleServiceTest {
         scheduleRegisterDTOSuccess = createScheduleDTOSuccess();
         scheduleDTOIdClienteDontExist = createScheduleDTOIdClienteDontExist();
         scheduleDTOIdClientNotValid = createScheduleDTOIdClientNotValid();
+        scheduleRegisterDTOIdServiceDontExist = createScheduleDTOIdServiceDontExist();
+        scheduleRegisterDTOIdBarberDontExist = createScheduleDTOIdBarberDontExist();
     }
 
     @Test
@@ -75,6 +78,26 @@ class ScheduleServiceTest {
                 "Você não pode realizar essa operação com outro usuário.");
     }
 
+    @Test
+    @DisplayName("Should return ValidationException wtih message: Id do serviço não encontrado. when a service don't exists")
+    @Transactional
+    void registerScheduleCase4() {
+
+        assertThrowsExactly(ValidationException.class,
+                ()-> scheduleService.registerSchedule(scheduleRegisterDTOIdServiceDontExist, 4L),
+                "Id do serviço não encontrado.");
+    }
+
+    @Test
+    @DisplayName("Should return ValidationException wtih message: Id do serviço não encontrado. when a service don't exists")
+    @Transactional
+    void registerScheduleCase5() {
+
+        assertThrowsExactly(ValidationException.class,
+                ()-> scheduleService.registerSchedule(scheduleRegisterDTOIdBarberDontExist, 4L),
+                "Id do barbeiro não encontrado.");
+    }
+
 
 
     @Test
@@ -102,5 +125,15 @@ class ScheduleServiceTest {
 
         LocalDateTime start = LocalDateTime.of(2024, 04, 29, 14, 30, 00);
         return new ScheduleRegisterDTO(start, 30, 5L, 1L, 1L) ;
+    }
+    private ScheduleRegisterDTO createScheduleDTOIdServiceDontExist(){
+
+        LocalDateTime start = LocalDateTime.of(2024, 04, 29, 14, 30, 00);
+        return new ScheduleRegisterDTO(start, 30, 5L, 1L, 12L) ;
+    }
+    private ScheduleRegisterDTO createScheduleDTOIdBarberDontExist(){
+
+        LocalDateTime start = LocalDateTime.of(2024, 04, 29, 14, 30, 00);
+        return new ScheduleRegisterDTO(start, 30, 5L, 14L, 1L) ;
     }
 }
