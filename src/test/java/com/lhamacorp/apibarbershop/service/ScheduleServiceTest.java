@@ -37,7 +37,8 @@ class ScheduleServiceTest {
     @Autowired
     private IntervalValidation intervalValidator;
     private ScheduleRegisterDTO scheduleRegisterDTOSuccess, scheduleDTOIdClienteDontExist, scheduleDTOIdClientNotValid;
-    private ScheduleRegisterDTO scheduleRegisterDTOIdServiceDontExist, scheduleRegisterDTOIdBarberDontExist;
+    private ScheduleRegisterDTO scheduleRegisterDTOIdServiceDontExist, scheduleRegisterDTOIdBarberDontExist, scheduleDTONotInBusinessHours;
+    private ScheduleRegisterDTO scheduleDTOBarberShopUnavailable;
 
     @BeforeEach
     void setUp() {
@@ -47,6 +48,8 @@ class ScheduleServiceTest {
         scheduleDTOIdClientNotValid = createScheduleDTOIdClientNotValid();
         scheduleRegisterDTOIdServiceDontExist = createScheduleDTOIdServiceDontExist();
         scheduleRegisterDTOIdBarberDontExist = createScheduleDTOIdBarberDontExist();
+        scheduleDTONotInBusinessHours = createScheduleDTONotInBusinessHours();
+        scheduleDTOBarberShopUnavailable = createScheduleDTOBarberShopUnavailable();
     }
 
     @Test
@@ -89,7 +92,7 @@ class ScheduleServiceTest {
     }
 
     @Test
-    @DisplayName("Should return ValidationException wtih message: Id do serviço não encontrado. when a service don't exists")
+    @DisplayName("Should return ValidationException wtih message: Id do barbeiro não encontrado. when a barber is not registered")
     @Transactional
     void registerScheduleCase5() {
 
@@ -98,6 +101,25 @@ class ScheduleServiceTest {
                 "Id do barbeiro não encontrado.");
     }
 
+    @Test
+    @DisplayName("Should return ValidationException wtih message: Agendamento fora de horário de funcionamento do estabelecimento when a schedule is outside of business hours")
+    @Transactional
+    void registerScheduleCase6() {
+
+        assertThrowsExactly(ValidationException.class,
+                ()-> scheduleService.registerSchedule(scheduleRegisterDTOIdBarberDontExist, 4L),
+                "Agendamento fora de horário de funcionamento do estabelecimento");
+    }
+
+    @Test
+    @DisplayName("Should return ValidationException wtih message: A barbearia não estara funcionando nessa data when a schedule maches with a unavailable time")
+    @Transactional
+    void registerScheduleCase7() {
+
+        assertThrowsExactly(ValidationException.class,
+                ()-> scheduleService.registerSchedule(scheduleRegisterDTOIdBarberDontExist, 4L),
+                "A barbearia não estara funcionando nessa data");
+    }
 
 
     @Test
@@ -109,31 +131,35 @@ class ScheduleServiceTest {
     }
 
     private ScheduleRegisterDTO createScheduleDTOSuccess(){
-
         LocalDateTime start = LocalDateTime.of(2024, 04, 29, 14, 30, 00);
         return new ScheduleRegisterDTO(start, 30, 4L, 1L, 1L) ;
     }
 
     private ScheduleRegisterDTO createScheduleDTOIdClienteDontExist(){
-
         LocalDateTime start = LocalDateTime.of(2024, 04, 29, 14, 30, 00);
         return new ScheduleRegisterDTO(start, 30, 10L, 1L, 1L) ;
-
     }
 
     private ScheduleRegisterDTO createScheduleDTOIdClientNotValid(){
-
         LocalDateTime start = LocalDateTime.of(2024, 04, 29, 14, 30, 00);
         return new ScheduleRegisterDTO(start, 30, 5L, 1L, 1L) ;
     }
     private ScheduleRegisterDTO createScheduleDTOIdServiceDontExist(){
-
         LocalDateTime start = LocalDateTime.of(2024, 04, 29, 14, 30, 00);
         return new ScheduleRegisterDTO(start, 30, 5L, 1L, 12L) ;
     }
     private ScheduleRegisterDTO createScheduleDTOIdBarberDontExist(){
-
         LocalDateTime start = LocalDateTime.of(2024, 04, 29, 14, 30, 00);
         return new ScheduleRegisterDTO(start, 30, 5L, 14L, 1L) ;
     }
+    private ScheduleRegisterDTO createScheduleDTONotInBusinessHours(){
+        LocalDateTime start = LocalDateTime.of(2025, 04, 06, 14, 30, 00);
+        return new ScheduleRegisterDTO(start, 30, 5L, 14L, 1L) ;
+    }
+
+    private ScheduleRegisterDTO createScheduleDTOBarberShopUnavailable(){
+        LocalDateTime start = LocalDateTime.of(2025, 03, 29, 14, 30, 00);
+        return new ScheduleRegisterDTO(start, 30, 5L, 14L, 1L) ;
+    }
+
 }

@@ -89,7 +89,7 @@ public class ScheduleValidation {
 
             if(intervalValidation.ValidateInterval(UT.getStart(), UT.getFinish(), scheduleRegisterDTO.start())){
 
-                throw new ValidationException("A barbearia não está funcionando nessa data");
+                throw new ValidationException("A barbearia não estara funcionando nessa data");
             }
 
         }
