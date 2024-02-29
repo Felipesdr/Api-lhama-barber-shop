@@ -38,7 +38,7 @@ class ScheduleServiceTest {
     private IntervalValidation intervalValidator;
     private ScheduleRegisterDTO scheduleRegisterDTOSuccess, scheduleDTOIdClienteDontExist, scheduleDTOIdClientNotValid;
     private ScheduleRegisterDTO scheduleRegisterDTOIdServiceDontExist, scheduleRegisterDTOIdBarberDontExist, scheduleDTONotInBusinessHours;
-    private ScheduleRegisterDTO scheduleDTOBarberShopUnavailable;
+    private ScheduleRegisterDTO scheduleDTOBarberShopUnavailable, scheduleDTOBarberHasAnotherSchedule;
 
     @BeforeEach
     void setUp() {
@@ -50,6 +50,7 @@ class ScheduleServiceTest {
         scheduleRegisterDTOIdBarberDontExist = createScheduleDTOIdBarberDontExist();
         scheduleDTONotInBusinessHours = createScheduleDTONotInBusinessHours();
         scheduleDTOBarberShopUnavailable = createScheduleDTOBarberShopUnavailable();
+        scheduleDTOBarberHasAnotherSchedule = createScheduleDTOBarberHasAnotherSchedule();
     }
 
     @Test
@@ -65,20 +66,24 @@ class ScheduleServiceTest {
     @DisplayName("Should return ValidationException wtih message: Id do cliente não encontrado. When clients id dosen't exist")
     @Transactional
     void registerScheduleCase2() {
-
-        assertThrowsExactly(ValidationException.class,
-                ()-> scheduleService.registerSchedule(scheduleDTOIdClienteDontExist, 4L),
-                "Id do cliente não encontrado.");
+        try{
+            scheduleService.registerSchedule(scheduleDTOIdClienteDontExist, 4L);
+            fail("Validation exception was not throw");
+        }catch (ValidationException e){
+            assertEquals("Id do cliente não encontrado.", e.getMessage());
+        }
     }
 
     @Test
     @DisplayName("Should return ValidationException wtih message: Você não pode realizar essa operação com outro usuário. when a client try to register a schedule for another client")
     @Transactional
     void registerScheduleCase3() {
-
-        assertThrowsExactly(ValidationException.class,
-                ()-> scheduleService.registerSchedule(scheduleDTOIdClientNotValid, 4L),
-                "Você não pode realizar essa operação com outro usuário.");
+        try{
+            scheduleService.registerSchedule(scheduleDTOIdClientNotValid, 4L);
+            fail("Validation exception was not throw");
+        }catch (ValidationException e){
+            assertEquals("Você não pode realizar essa operação com outro usuário.", e.getMessage());
+        }
     }
 
     @Test
@@ -86,9 +91,12 @@ class ScheduleServiceTest {
     @Transactional
     void registerScheduleCase4() {
 
-        assertThrowsExactly(ValidationException.class,
-                ()-> scheduleService.registerSchedule(scheduleRegisterDTOIdServiceDontExist, 4L),
-                "Id do serviço não encontrado.");
+        try{
+            scheduleService.registerSchedule(scheduleRegisterDTOIdServiceDontExist, 4L);
+            fail("Validation exception was not throw");
+        }catch (ValidationException e){
+            assertEquals("Id do serviço não encontrado.", e.getMessage());
+        }
     }
 
     @Test
@@ -96,9 +104,12 @@ class ScheduleServiceTest {
     @Transactional
     void registerScheduleCase5() {
 
-        assertThrowsExactly(ValidationException.class,
-                ()-> scheduleService.registerSchedule(scheduleRegisterDTOIdBarberDontExist, 4L),
-                "Id do barbeiro não encontrado.");
+        try{
+            scheduleService.registerSchedule(scheduleRegisterDTOIdBarberDontExist, 4L);
+            fail("Validation exception was not throw");
+        }catch (ValidationException e){
+            assertEquals("Id do barbeiro não encontrado.", e.getMessage());
+        }
     }
 
     @Test
@@ -106,9 +117,12 @@ class ScheduleServiceTest {
     @Transactional
     void registerScheduleCase6() {
 
-        assertThrowsExactly(ValidationException.class,
-                ()-> scheduleService.registerSchedule(scheduleRegisterDTOIdBarberDontExist, 4L),
-                "Agendamento fora de horário de funcionamento do estabelecimento");
+        try{
+            scheduleService.registerSchedule(scheduleDTONotInBusinessHours, 4L);
+            fail("Validation exception was not throw");
+        }catch (ValidationException e){
+            assertEquals("Agendamento fora de horário de funcionamento do estabelecimento", e.getMessage());
+        }
     }
 
     @Test
@@ -116,9 +130,26 @@ class ScheduleServiceTest {
     @Transactional
     void registerScheduleCase7() {
 
-        assertThrowsExactly(ValidationException.class,
-                ()-> scheduleService.registerSchedule(scheduleRegisterDTOIdBarberDontExist, 4L),
-                "A barbearia não estara funcionando nessa data");
+        try{
+            scheduleService.registerSchedule(scheduleDTOBarberShopUnavailable, 4L);
+            fail("Validation exception was not throw");
+        }catch (ValidationException e){
+            assertEquals("A barbearia não estara funcionando nessa data", e.getMessage());
+        }
+    }
+
+    @Test
+    @DisplayName("Should return ValidationException wtih message: Esse barbeiro está indisponível para essa data. when a schedule maches with another schedule of the informed barber")
+    @Transactional
+    void registerScheduleCase8() {
+
+        try{
+            scheduleService.registerSchedule(scheduleDTOBarberHasAnotherSchedule, 4L);
+            fail("Validation exception was not throw");
+        }catch (ValidationException e){
+            assertEquals("Esse barbeiro está indisponível para essa data.", e.getMessage());
+        }
+
     }
 
 
@@ -146,20 +177,32 @@ class ScheduleServiceTest {
     }
     private ScheduleRegisterDTO createScheduleDTOIdServiceDontExist(){
         LocalDateTime start = LocalDateTime.of(2024, 04, 29, 14, 30, 00);
-        return new ScheduleRegisterDTO(start, 30, 5L, 1L, 12L) ;
+        return new ScheduleRegisterDTO(start, 30, 4L, 1L, 12L) ;
     }
     private ScheduleRegisterDTO createScheduleDTOIdBarberDontExist(){
         LocalDateTime start = LocalDateTime.of(2024, 04, 29, 14, 30, 00);
-        return new ScheduleRegisterDTO(start, 30, 5L, 14L, 1L) ;
+        return new ScheduleRegisterDTO(start, 30, 4L, 14L, 1L) ;
     }
     private ScheduleRegisterDTO createScheduleDTONotInBusinessHours(){
         LocalDateTime start = LocalDateTime.of(2025, 04, 06, 14, 30, 00);
-        return new ScheduleRegisterDTO(start, 30, 5L, 14L, 1L) ;
+        return new ScheduleRegisterDTO(start, 30, 4L, 3L, 1L) ;
     }
 
     private ScheduleRegisterDTO createScheduleDTOBarberShopUnavailable(){
-        LocalDateTime start = LocalDateTime.of(2025, 03, 29, 14, 30, 00);
-        return new ScheduleRegisterDTO(start, 30, 5L, 14L, 1L) ;
+        LocalDateTime start = LocalDateTime.of(2025, 03, 24, 9, 30, 00);
+        return new ScheduleRegisterDTO(start, 30, 4L, 3L, 1L) ;
+    }
+
+    private ScheduleRegisterDTO createScheduleDTOBarberHasAnotherSchedule(){
+
+        LocalDateTime start = LocalDateTime.of(2025, 07, 07, 9, 00, 00);
+        return new ScheduleRegisterDTO(start, 30, 4L, 3L, 1L) ;
+    }
+
+    private ScheduleRegisterDTO createScheduleDTOSuccessRandomBarber(){
+
+        LocalDateTime start = LocalDateTime.of(2025, 07, 06, 9, 00, 00);
+        return new ScheduleRegisterDTO(start, 30, 4L, 3L, 1L) ;
     }
 
 }
