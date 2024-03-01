@@ -12,6 +12,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 import java.time.LocalDateTime;
 
@@ -38,7 +40,7 @@ class ScheduleServiceTest {
     private IntervalValidation intervalValidator;
     private ScheduleRegisterDTO scheduleRegisterDTOSuccess, scheduleDTOIdClienteDontExist, scheduleDTOIdClientNotValid;
     private ScheduleRegisterDTO scheduleRegisterDTOIdServiceDontExist, scheduleRegisterDTOIdBarberDontExist, scheduleDTONotInBusinessHours;
-    private ScheduleRegisterDTO scheduleDTOBarberShopUnavailable, scheduleDTOBarberHasAnotherSchedule;
+    private ScheduleRegisterDTO scheduleDTOBarberShopUnavailable, scheduleDTOBarberHasAnotherSchedule, scheduleRegisterDTOSuccessRandomBarber;
 
     @BeforeEach
     void setUp() {
@@ -51,6 +53,7 @@ class ScheduleServiceTest {
         scheduleDTONotInBusinessHours = createScheduleDTONotInBusinessHours();
         scheduleDTOBarberShopUnavailable = createScheduleDTOBarberShopUnavailable();
         scheduleDTOBarberHasAnotherSchedule = createScheduleDTOBarberHasAnotherSchedule();
+        scheduleRegisterDTOSuccessRandomBarber = createScheduleDTOSuccessRandomBarber();
     }
 
     @Test
@@ -151,6 +154,30 @@ class ScheduleServiceTest {
         }
 
     }
+    @Test
+    @DisplayName("Should return Id of a random available barber when barber id is not informed")
+    @Transactional
+    void registerScheduleCase9() {
+
+        Long result = scheduleService.registerSchedule(scheduleRegisterDTOSuccessRandomBarber, 4L);
+        result = scheduleRepository.getReferenceById(result).getBarber().getIdUser();
+        assertThat(result, anyOf(is(1L), is(2L), is(3L)));
+
+        Long result2 = scheduleService.registerSchedule(scheduleRegisterDTOSuccessRandomBarber, 4L);
+        result2 = scheduleRepository.getReferenceById(result).getBarber().getIdUser();
+        assertThat(result2, anyOf(is(1L), is(2L), is(3L), not(result)));
+
+        Long result3 = scheduleService.registerSchedule(scheduleRegisterDTOSuccessRandomBarber, 4L);
+        result3 = scheduleRepository.getReferenceById(result).getBarber().getIdUser();
+        assertThat(result3, anyOf(is(1L), is(2L), is(3L), not(result), not(result2)));
+
+        try{
+            scheduleService.registerSchedule(scheduleRegisterDTOSuccessRandomBarber, 4L);
+            fail("Validation exception was not throw");
+        }catch (ValidationException e){
+            assertEquals("Nenhum barbeiro disponivel para essa data.", e.getMessage());
+        }
+    }
 
 
     @Test
@@ -201,8 +228,8 @@ class ScheduleServiceTest {
 
     private ScheduleRegisterDTO createScheduleDTOSuccessRandomBarber(){
 
-        LocalDateTime start = LocalDateTime.of(2025, 07, 06, 9, 00, 00);
-        return new ScheduleRegisterDTO(start, 30, 4L, 3L, 1L) ;
+        LocalDateTime start = LocalDateTime.of(2025, 07, 03, 9, 00, 00);
+        return new ScheduleRegisterDTO(start, 30, 4L, null, 1L) ;
     }
 
 }
