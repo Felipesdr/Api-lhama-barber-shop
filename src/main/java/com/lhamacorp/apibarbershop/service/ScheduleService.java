@@ -118,7 +118,7 @@ public class ScheduleService {
             boolean barberUnavailableTime = false;
             boolean barberSchedule = false;
 
-            List<BarberUnavailableTime> barberUnavailableTimeList = barberUnavailableTimeRepository.findAllByBarberIdUserAndActiveTrueAndStartAfter(U.getIdUser(), LocalDateTime.now());
+            List<BarberUnavailableTime> barberUnavailableTimeList = barberUnavailableTimeRepository.findAllByBarberIdUserAndStartAfterAndStartBeforeOrStartEquals(U.getIdUser(), LocalDateTime.now(), scheduleRegisterData.start().minusMinutes(scheduleRegisterData.duration()), scheduleRegisterData.start());
 
             //If barber has no unavailable time, availableBarber = true
             if(barberUnavailableTimeList.isEmpty()) {
@@ -141,27 +141,9 @@ public class ScheduleService {
 
             }
 
-            List<Schedule> futureSchedulesList = scheduleRepository.findAllByBarberIdUserAndStartAfterAndStatusNot(U.getIdUser(), LocalDateTime.now(), ScheduleStatus.CANCELED);
+            Schedule potentialBarberSchedule = scheduleRepository.findByBarberIdUserAndStartEqualsAndStatusNot(U.getIdUser(), scheduleRegisterData.start(), ScheduleStatus.CANCELED);
 
-            //if barber has no future schedules, availableBarber = true. Id schedule status 5 = canceled
-            if(futureSchedulesList.isEmpty()) {
-
-                barberSchedule = true;
-
-            }
-
-            //if barber has no conflitcts with other future schedules, availableBarber = true
-            for(Schedule S : futureSchedulesList) {
-                if(barberValidator.validateBarber(scheduleRegisterData, S.getStart(), S.getFinish())) {
-
-                    barberSchedule = true;
-
-                }else{
-
-                    barberSchedule = false;
-
-                }
-            }
+            if(potentialBarberSchedule == null) barberSchedule = true;
 
             if(barberUnavailableTime && barberSchedule){
 

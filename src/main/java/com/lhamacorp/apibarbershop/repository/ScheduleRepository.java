@@ -14,6 +14,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
 
     List<Schedule> findAllByBarberIdUserAndStartAfterAndStatusNot(Long idUserBarber, LocalDateTime start, ScheduleStatus status);
+    Schedule findByBarberIdUserAndStartEqualsAndStatusNot(Long idUserBarber, LocalDateTime startSchedule, ScheduleStatus status);
 
     List<Schedule> findAllByStartAfterAndFinishBeforeAndStatusNot(LocalDateTime start, LocalDateTime finish, ScheduleStatus status);
 

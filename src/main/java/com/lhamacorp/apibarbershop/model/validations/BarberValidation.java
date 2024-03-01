@@ -104,7 +104,6 @@ public class BarberValidation {
         if(closeToUnavailableTIme){
 
             return false;
-
         }
 
         return true;
