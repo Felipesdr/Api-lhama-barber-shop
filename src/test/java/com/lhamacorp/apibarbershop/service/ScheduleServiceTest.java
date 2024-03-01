@@ -51,7 +51,6 @@ class ScheduleServiceTest {
 
     @BeforeEach
     void setUp() {
-
         scheduleRegisterDTOSuccess = createScheduleDTOSuccess();
         scheduleDTOIdClienteDontExist = createScheduleDTOIdClienteDontExist();
         scheduleDTOIdClientNotValid = createScheduleDTOIdClientNotValid();
@@ -216,7 +215,7 @@ class ScheduleServiceTest {
     }
 
     @Test
-    @DisplayName("Should return schedule with barber who's id is * (only one available in this loocal date time")
+    @DisplayName("Should return barber who's id is 1L (the only one available in this loocal date time")
     @Transactional
     void getAllAvailableBarbersByALocalDateTimeCase2() {
 
@@ -225,6 +224,28 @@ class ScheduleServiceTest {
         assertEquals(1, availableBarbers.get(0).getIdUser());;
     }
 
+    @Test
+    @DisplayName("Should return list of 2 barbers with barber ids 2L and 1L (the only two available in this loocal date time")
+    @Transactional
+    void getAllAvailableBarbersByALocalDateTimeCase3() {
+
+        List<User> availableBarbers= scheduleService.findAvailableBarbers(scheduleRegisterDTOTwoBarbersAvailable);
+        assertEquals(2, availableBarbers.size());
+        assertThat(availableBarbers.get(0).getIdUser(), anyOf(is(1L), is(2L)));
+        assertThat(availableBarbers.get(1).getIdUser(), anyOf(is(1L), is(2L)));
+    }
+
+    @Test
+    @DisplayName("Should return list of 3 barbers with barber ids 1L, 2L and 3L (the only two available in this loocal date time")
+    @Transactional
+    void getAllAvailableBarbersByALocalDateTimeCase4() {
+
+        List<User> availableBarbers= scheduleService.findAvailableBarbers(scheduleRegisterDTOAllBarbersAvailable);
+        assertEquals(3, availableBarbers.size());
+        assertThat(availableBarbers.get(0).getIdUser(), anyOf(is(1L), is(2L), is(3L)));
+        assertThat(availableBarbers.get(1).getIdUser(), anyOf(is(1L), is(2L), is(3L)));
+        assertThat(availableBarbers.get(2).getIdUser(), anyOf(is(1L), is(2L), is(3L)));
+    }
 
     // Private methods for test DTOs creation
     private ScheduleRegisterDTO createScheduleDTOSuccess(){
