@@ -1,7 +1,9 @@
 package com.lhamacorp.apibarbershop.service;
 
 import com.lhamacorp.apibarbershop.infra.exception.ValidationException;
+import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.AvailableTimeDTO;
 import com.lhamacorp.apibarbershop.model.DTOs.scheduleDTO.ScheduleRegisterDTO;
+import com.lhamacorp.apibarbershop.model.User;
 import com.lhamacorp.apibarbershop.model.validations.BarberValidation;
 import com.lhamacorp.apibarbershop.model.validations.IntervalValidation;
 import com.lhamacorp.apibarbershop.model.validations.ScheduleValidation;
@@ -15,7 +17,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
@@ -41,6 +47,7 @@ class ScheduleServiceTest {
     private ScheduleRegisterDTO scheduleRegisterDTOSuccess, scheduleDTOIdClienteDontExist, scheduleDTOIdClientNotValid;
     private ScheduleRegisterDTO scheduleRegisterDTOIdServiceDontExist, scheduleRegisterDTOIdBarberDontExist, scheduleDTONotInBusinessHours;
     private ScheduleRegisterDTO scheduleDTOBarberShopUnavailable, scheduleDTOBarberHasAnotherSchedule, scheduleRegisterDTOSuccessRandomBarber;
+    private ScheduleRegisterDTO scheduleRegisterDTONoBarbersAvailable, scheduleRegisterDTOOneBarbersAvailable, scheduleRegisterDTOTwoBarbersAvailable, scheduleRegisterDTOAllBarbersAvailable;
 
     @BeforeEach
     void setUp() {
@@ -54,6 +61,10 @@ class ScheduleServiceTest {
         scheduleDTOBarberShopUnavailable = createScheduleDTOBarberShopUnavailable();
         scheduleDTOBarberHasAnotherSchedule = createScheduleDTOBarberHasAnotherSchedule();
         scheduleRegisterDTOSuccessRandomBarber = createScheduleDTOSuccessRandomBarber();
+        scheduleRegisterDTONoBarbersAvailable = createScheduleRegisterDTONoBarbersAvailable();
+        scheduleRegisterDTOOneBarbersAvailable = createScheduleRegisterDTOOneBarberAvailable();
+        scheduleRegisterDTOTwoBarbersAvailable = createScheduleRegisterDTOTwoBarberAvailable();
+        scheduleRegisterDTOAllBarbersAvailable = createScheduleRegisterDTOAllBarberAvailable();
     }
 
     @Test
@@ -61,7 +72,7 @@ class ScheduleServiceTest {
     @Transactional
     void registerScheduleCase1() {
 
-        assertEquals(6L, scheduleService.registerSchedule(scheduleRegisterDTOSuccess, 4L));
+        assertEquals(7L, scheduleService.registerSchedule(scheduleRegisterDTOSuccess, 4L));
 
     }
 
@@ -181,13 +192,41 @@ class ScheduleServiceTest {
 
 
     @Test
-    void findAvailableBarbers() {
+    @DisplayName("Should return all available time from the barber shop")
+    @Transactional
+    void getAllAvailableTime() {
+        LocalDate day = LocalDate.of(2025, 03,29);
+        List<AvailableTimeDTO> availableTimes = createListAvailableTime();
+        assertEquals(availableTimes, scheduleService.getAllAvailableTime(day));
+    }
+
+
+    @Test
+    @DisplayName("Should return ValidationException with message: Nenhum barbeiro disponivel para essa data. when there is no avaiable barbers")
+    @Transactional
+    void getAllAvailableBarbersByALocalDateTimeCase1() {
+
+        try{
+            scheduleService.findAvailableBarbers(scheduleRegisterDTONoBarbersAvailable);
+            fail("Validation exception was not throw");
+        }catch (ValidationException e){
+            assertEquals("Nenhum barbeiro disponivel para essa data.", e.getMessage());
+        }
+
     }
 
     @Test
-    void getAllAvailableTime() {
+    @DisplayName("Should return schedule with barber who's id is * (only one available in this loocal date time")
+    @Transactional
+    void getAllAvailableBarbersByALocalDateTimeCase2() {
+
+        List<User> availableBarbers= scheduleService.findAvailableBarbers(scheduleRegisterDTOOneBarbersAvailable);
+        assertEquals(1, availableBarbers.size());
+        assertEquals(1, availableBarbers.get(0).getIdUser());;
     }
 
+
+    // Private methods for test DTOs creation
     private ScheduleRegisterDTO createScheduleDTOSuccess(){
         LocalDateTime start = LocalDateTime.of(2024, 04, 29, 14, 30, 00);
         return new ScheduleRegisterDTO(start, 30, 4L, 1L, 1L) ;
@@ -216,7 +255,7 @@ class ScheduleServiceTest {
     }
 
     private ScheduleRegisterDTO createScheduleDTOBarberShopUnavailable(){
-        LocalDateTime start = LocalDateTime.of(2025, 03, 24, 9, 30, 00);
+        LocalDateTime start = LocalDateTime.of(2025, 03, 29, 9, 30, 00);
         return new ScheduleRegisterDTO(start, 30, 4L, 3L, 1L) ;
     }
 
@@ -231,5 +270,53 @@ class ScheduleServiceTest {
         LocalDateTime start = LocalDateTime.of(2025, 07, 03, 9, 00, 00);
         return new ScheduleRegisterDTO(start, 30, 4L, null, 1L) ;
     }
+
+    private List<AvailableTimeDTO> createListAvailableTime(){
+
+        LocalDateTime[] availableTimes = {
+                LocalDateTime.of(2025, 3, 29, 12, 0),
+                LocalDateTime.of(2025, 3, 29, 12, 30),
+                LocalDateTime.of(2025, 3, 29, 13, 30),
+                LocalDateTime.of(2025, 3, 29, 14, 0),
+                LocalDateTime.of(2025, 3, 29, 14, 30),
+                LocalDateTime.of(2025, 3, 29, 15, 0),
+                LocalDateTime.of(2025, 3, 29, 15, 30),
+                LocalDateTime.of(2025, 3, 29, 16, 0),
+                LocalDateTime.of(2025, 3, 29, 16, 30),
+                LocalDateTime.of(2025, 3, 29, 17, 0),
+                LocalDateTime.of(2025, 3, 29, 17, 30)
+        };
+
+        List<LocalDateTime> availableTimesList = new ArrayList<>();
+        Collections.addAll(availableTimesList, availableTimes);
+        List<AvailableTimeDTO> availableTimesDTOs = availableTimesList.stream().map(AvailableTimeDTO::new).toList();
+        return availableTimesDTOs;
+    }
+
+    private ScheduleRegisterDTO createScheduleRegisterDTONoBarbersAvailable(){
+
+        LocalDateTime start = LocalDateTime.of(2025, 03, 29, 13, 00, 00);
+        return new ScheduleRegisterDTO(start, 30, 4L, null, 1L);
+
+    }
+
+    private ScheduleRegisterDTO createScheduleRegisterDTOOneBarberAvailable(){
+        LocalDateTime start = LocalDateTime.of(2025, 3, 29, 13, 30, 0);
+        return new ScheduleRegisterDTO(start, 30, 4L, null, 1L);
+    }
+
+    private ScheduleRegisterDTO createScheduleRegisterDTOTwoBarberAvailable(){
+        LocalDateTime start = LocalDateTime.of(2025, 7, 7, 9, 0, 0);
+        return new ScheduleRegisterDTO(start, 30, 4L, null, 1L);
+    }
+
+    private ScheduleRegisterDTO createScheduleRegisterDTOAllBarberAvailable(){
+        LocalDateTime start = LocalDateTime.of(2025, 8, 7, 9, 0, 0);
+        return new ScheduleRegisterDTO(start, 30, 4L, null, 1L);
+    }
+
+
+
+
 
 }

@@ -71,10 +71,6 @@ public class BarberUnavaibleTimeService {
 
         Long idBarber = updateData.idBarber();
 
-        System.out.println("Id do usuario da requisição: " + idRequestingUser);
-        System.out.println("Role do usuario da requisição:  " + requestingUser.getRole());
-        System.out.println("Id do barbeiro indisponivel: " + idBarber);
-
         userIdValidationForNonAdmin(idRequestingUser, idBarber, requestingUser);
 
         BarberUnavailableTime update = barberUnavailableTimeRepository.getReferenceById(updateData.idBarberUnavailableTime());
